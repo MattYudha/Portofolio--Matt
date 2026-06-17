@@ -851,4 +851,75 @@
     padding: 0.4rem 1.2rem;
     font-size: 1rem;
   }
+
+  .mobilePromptContainer {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 380px;
+    background-color: rgba(253, 251, 247, 0.95);
+    @include handShape1;
+    @include handShadow;
+    @include handBorder;
+    @include sketchyEdgeStrong;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    z-index: 200;
+    pointer-events: auto;
+  }
+
+  .mobilePromptText {
+    font-family: "Caveat", cursive;
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #3a3530;
+    text-align: center;
+    margin: 0;
+  }
+
+  .mobilePromptActions {
+    display: flex;
+    gap: 1.5rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .promptBtnYes, .promptBtnNo {
+    padding: 0.4rem 1.5rem;
+    font-family: "Caveat", cursive;
+    font-size: 1.25rem;
+    font-weight: 700;
+    cursor: pointer;
+    @include handBorder;
+    transition: all 0.2s ease;
+    outline: none;
+  }
+
+  .promptBtnYes {
+    background: rgba(253, 230, 138, 0.85);
+    color: #3a3530;
+    @include handShape4;
+    @include handShadow;
+
+    &:active {
+      transform: scale(0.95) rotate(-1deg);
+      background: rgba(253, 230, 138, 1);
+    }
+  }
+
+  .promptBtnNo {
+    background: transparent;
+    color: #6a5a4a;
+    @include handShape3;
+
+    &:active {
+      transform: scale(0.95) rotate(1deg);
+      background: rgba(58, 53, 48, 0.05);
+    }
+  }
 }

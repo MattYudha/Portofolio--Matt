@@ -31,10 +31,41 @@ const PortfolioOverlay = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [isCardMinimized, setIsCardMinimized] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [mobileConfirmations, setMobileConfirmations] = useState({
+    home: null,
+    "projects-1": null,
+    experience: null,
+    "projects-2": null,
+    contact: null
+  });
+
+  const sectionPrompts = {
+    home: "Ingin melihat info profil Rahmat?",
+    "projects-1": "Ingin melihat daftar produk?",
+    experience: "Ingin melihat riwayat pengalaman kerja?",
+    "projects-2": "Ingin melihat detail proyek teknologi?",
+    contact: "Ingin menghubungi Rahmat?"
+  };
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     setIsCardMinimized(false);
+    // Reset confirmation state when section changes so user is prompted on arrival
+    setMobileConfirmations((prev) => ({
+      ...prev,
+      [activeSection]: null
+    }));
   }, [activeSection]);
+
+  const isPromptReady = activeSection !== "home" || scrollProgress >= 0.04;
+  const shouldShowCard = !isMobile || mobileConfirmations[activeSection] === true;
 
   if (!isLoaded) return null;
 
@@ -105,8 +136,29 @@ const PortfolioOverlay = () => {
 
       {/* Main Dynamic Panel Overlays */}
       <main className={styles.mainContent}>
+        {/* Mobile Scroll Confirmation Prompt */}
+        {isMobile && mobileConfirmations[activeSection] === null && isPromptReady && sectionPrompts[activeSection] && (
+          <div className={`${styles.mobilePromptContainer} ${styles.fadeIn}`}>
+            <p className={styles.mobilePromptText}>{sectionPrompts[activeSection]}</p>
+            <div className={styles.mobilePromptActions}>
+              <button 
+                className={styles.promptBtnYes} 
+                onClick={() => setMobileConfirmations(prev => ({ ...prev, [activeSection]: true }))}
+              >
+                Ya
+              </button>
+              <button 
+                className={styles.promptBtnNo} 
+                onClick={() => setMobileConfirmations(prev => ({ ...prev, [activeSection]: false }))}
+              >
+                Tidak
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* PROFILE SECTION (LEFT PANEL) */}
-        {activeSection === "home" && (
+        {activeSection === "home" && shouldShowCard && (
           <section className={`${styles.panel} ${styles.panelLeft} ${styles.fadeIn} ${scrollProgress >= 0.10 ? styles.cardHidden : ""} ${scrollProgress < 0.04 ? styles.mobileStartHidden : ""}`}>
             <GlassCard isCardMinimized={isCardMinimized} setIsCardMinimized={setIsCardMinimized}>
               <div className={styles.cardHeader}>
@@ -145,7 +197,7 @@ const PortfolioOverlay = () => {
         )}
 
         {/* PRODUCTS SECTION 1 (RIGHT PANEL) */}
-        {activeSection === "projects-1" && (
+        {activeSection === "projects-1" && shouldShowCard && (
           <section className={`${styles.panel} ${styles.panelRight} ${styles.fadeIn}`}>
             <GlassCard isCardMinimized={isCardMinimized} setIsCardMinimized={setIsCardMinimized}>
               <div className={styles.cardHeader}>
@@ -177,7 +229,7 @@ const PortfolioOverlay = () => {
         )}
 
         {/* EXPERIENCE SECTION (LEFT PANEL) */}
-        {activeSection === "experience" && (
+        {activeSection === "experience" && shouldShowCard && (
           <section className={`${styles.panel} ${styles.panelLeft} ${styles.fadeIn}`}>
             <GlassCard isCardMinimized={isCardMinimized} setIsCardMinimized={setIsCardMinimized}>
               <div className={styles.cardHeader}>
@@ -207,7 +259,7 @@ const PortfolioOverlay = () => {
         )}
 
         {/* PRODUCTS SECTION 2 (RIGHT PANEL) */}
-        {activeSection === "projects-2" && (
+        {activeSection === "projects-2" && shouldShowCard && (
           <section className={`${styles.panel} ${styles.panelRight} ${styles.fadeIn}`}>
             <GlassCard isCardMinimized={isCardMinimized} setIsCardMinimized={setIsCardMinimized}>
               <div className={styles.cardHeader}>
@@ -239,7 +291,7 @@ const PortfolioOverlay = () => {
         )}
 
         {/* CONTACT SECTION (LEFT PANEL) */}
-        {activeSection === "contact" && (
+        {activeSection === "contact" && shouldShowCard && (
           <section className={`${styles.panel} ${styles.panelLeft} ${styles.fadeIn}`}>
             <GlassCard isCardMinimized={isCardMinimized} setIsCardMinimized={setIsCardMinimized}>
               <div className={styles.cardHeader}>
