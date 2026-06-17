@@ -6,7 +6,7 @@ export const profileData = {
   phones: ["+6281387683819", "+6281380104340"],
   github: "https://github.com/MattYudha/",
   linkedin: "https://www.linkedin.com/in/rahmat-yudi-burhanudin/",
-  about: "I'm a Full-Stack Mobile Developer Swift / Flutter based in Tangerang who builds production-grade systems, not just assignments. Proficient in React.js, Next.js, TypeScript, Supabase, Node.js, Go, and Lua, I've shipped real products across web, AI, and game development. I've worked professionally at PT Telekomunikasi Indonesia (Telkom) as a Junior Software Engineer, interned at Toge Productions as a Script & VFX Specialist, and independently delivered a full-stack platform for PT Emran Ghanim Asahi. My personal projects range from an autonomous AI financial audit system (Elysian) to a real-time national disaster monitoring platform (Floodzy) — built not because I had to, but because I saw problems worth solving.",
+  about: "I enjoy tackling complex problems end to end, from system design and backend architecture to polished user experiences.\n\nAs a Full-Stack Mobile Developer based in Tangerang, I focus on building production-grade systems rather than just assignments. My expertise spans React, Next.js, Go, Swift, and Flutter.\n\nMy journey ranges from enterprise software at Telkom Indonesia to game development at Toge Productions. I also build impactful platforms like Elysian (AI audit) and Floodzy (disaster monitoring)—simply because I see problems worth solving.",
   education: {
     degree: "Bachelor of Informatics Engineering",
     school: "",
