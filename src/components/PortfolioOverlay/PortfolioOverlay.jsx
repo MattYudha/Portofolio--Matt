@@ -231,26 +231,24 @@ const PortfolioOverlay = () => {
     <div className={styles.overlayContainer} data-prevent-scroll="true">
       {/* Floating Header */}
       <header className={styles.header}>
-        <div className={styles.headerTop}>
-          <div className={styles.logoContainer} onClick={() => jumpToSection(0)}>
-            <span className={styles.logoPanda}>🐼</span>
-            <div>
-              <h1 className={styles.logoName}>{profileData.name}</h1>
-              <p className={styles.logoTitle}>{profileData.title}</p>
-            </div>
+        <div className={styles.logoContainer} onClick={() => jumpToSection(0)}>
+          <span className={styles.logoPanda}>🐼</span>
+          <div>
+            <h1 className={styles.logoName}>{profileData.name}</h1>
+            <p className={styles.logoTitle}>{profileData.title}</p>
           </div>
-          
-          {/* Mobile Dark Mode Toggle (Always visible) */}
-          {isMobile && (
-            <button
-              className={styles.themeToggleBtn}
-              onClick={toggleNightMode}
-              title="Toggle Night Mode"
-            >
-              {isNightMode ? "☀️" : "🌙"}
-            </button>
-          )}
         </div>
+        
+        {/* Mobile Dark Mode Toggle (Absolute position at top right) */}
+        {isMobile && (
+          <button
+            className={styles.themeToggleBtn}
+            onClick={toggleNightMode}
+            title="Toggle Night Mode"
+          >
+            {isNightMode ? "☀️" : "🌙"}
+          </button>
+        )}
 
         <nav className={styles.nav}>
           {navItems.map((item) => (

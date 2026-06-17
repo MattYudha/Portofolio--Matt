@@ -65,16 +65,14 @@
   align-items: center;
   padding: 1.25rem 2.5rem;
   background: transparent;
-}
-
-.headerTop {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
+  position: relative;
 }
 
 .themeToggleBtn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
   font-size: 1.5rem;
   padding: 0.5rem;
   border-radius: 50%;
