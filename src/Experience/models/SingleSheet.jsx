@@ -215,11 +215,8 @@ export default function Model({ scrollProgress, ...props }) {
 
       <group ref={kpopRumiGroupRef}>
         <mesh
-          ref={kpopRumiRef}
-          geometry={nodes.rumi002.geometry}
-          material={kpop}
+          visible={false}
           scale={[-0.999, -1, -0.447]}
-          rotation={[0, Math.PI, 0]}
           onPointerEnter={() => {
             usePortfolioStore.getState().setHoveredItem("kicau_finder");
           }}
@@ -230,16 +227,22 @@ export default function Model({ scrollProgress, ...props }) {
             const proj = projectsData.find((p) => p.id === "kicau_finder");
             if (proj) usePortfolioStore.getState().setSelectedProject(proj);
           }}
+        >
+          <boxGeometry args={[4, 4, 2]} />
+        </mesh>
+        <mesh
+          ref={kpopRumiRef}
+          geometry={nodes.rumi002.geometry}
+          material={kpop}
+          scale={[-0.999, -1, -0.447]}
+          rotation={[0, Math.PI, 0]}
         />
       </group>
 
       <group ref={kpopSignGroupRef}>
         <mesh
-          ref={kpopSignRef}
-          geometry={nodes.rumi003.geometry}
-          material={kpop}
+          visible={false}
           scale={[0.999, 1, 0.574]}
-          rotation={[0, Math.PI, 0]}
           onPointerEnter={() => {
             usePortfolioStore.getState().setHoveredItem("emran_profile");
           }}
@@ -250,6 +253,15 @@ export default function Model({ scrollProgress, ...props }) {
             const proj = projectsData.find((p) => p.id === "emran_profile");
             if (proj) usePortfolioStore.getState().setSelectedProject(proj);
           }}
+        >
+          <boxGeometry args={[4, 4, 2]} />
+        </mesh>
+        <mesh
+          ref={kpopSignRef}
+          geometry={nodes.rumi003.geometry}
+          material={kpop}
+          scale={[0.999, 1, 0.574]}
+          rotation={[0, Math.PI, 0]}
         />
       </group>
     </group>

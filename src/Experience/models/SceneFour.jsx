@@ -84,10 +84,9 @@ export default function Model(props) {
         position={[20.852, 4.776, -2.754]}
         rotation={[Math.PI / 2, -0.064, 0]}
       />
+      {/* First Paper Hitbox */}
       <mesh
-        ref={firstPaperRef}
-        geometry={nodes.Plane125.geometry}
-        material={scene_4}
+        visible={false}
         position={[16.29, 3.282, firstPaperOriginalZ]}
         rotation={[Math.PI / 2, -0.007, 0]}
         onPointerEnter={() => {
@@ -102,11 +101,21 @@ export default function Model(props) {
           const proj = projectsData.find((p) => p.id === "elysian");
           if (proj) usePortfolioStore.getState().setSelectedProject(proj);
         }}
-      />
+      >
+        <boxGeometry args={[3, 3, 2]} />
+      </mesh>
+      {/* First Paper Visual */}
       <mesh
-        ref={secondPaperRef}
-        geometry={nodes.Plane126.geometry}
+        ref={firstPaperRef}
+        geometry={nodes.Plane125.geometry}
         material={scene_4}
+        position={[16.29, 3.282, firstPaperOriginalZ]}
+        rotation={[Math.PI / 2, -0.007, 0]}
+      />
+
+      {/* Second Paper Hitbox */}
+      <mesh
+        visible={false}
         position={[17.918, 4.052, secondPaperOriginalZ]}
         rotation={[Math.PI / 2, -0.114, 0]}
         onPointerEnter={() => {
@@ -121,6 +130,16 @@ export default function Model(props) {
           const proj = projectsData.find((p) => p.id === "floodzy");
           if (proj) usePortfolioStore.getState().setSelectedProject(proj);
         }}
+      >
+        <boxGeometry args={[3, 3, 2]} />
+      </mesh>
+      {/* Second Paper Visual */}
+      <mesh
+        ref={secondPaperRef}
+        geometry={nodes.Plane126.geometry}
+        material={scene_4}
+        position={[17.918, 4.052, secondPaperOriginalZ]}
+        rotation={[Math.PI / 2, -0.114, 0]}
       />
       <mesh
         geometry={nodes.Plane127.geometry}

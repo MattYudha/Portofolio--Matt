@@ -27,11 +27,10 @@ const GlassCard = ({ children, isCardMinimized, setIsCardMinimized }) => {
 };
 
 const PortfolioOverlay = () => {
-  const { activeSection, scrollProgress, setSelectedProject, setSelectedExperience, isLoaded } = usePortfolioStore();
+  const { activeSection, scrollProgress, setSelectedProject, setSelectedExperience, isLoaded, isMobile } = usePortfolioStore();
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [isCardMinimized, setIsCardMinimized] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const [showSwipeHint, setShowSwipeHint] = useState(false);
   const [mobileConfirmations, setMobileConfirmations] = useState({
     home: null,
@@ -50,16 +49,10 @@ const PortfolioOverlay = () => {
   };
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-
     const hasSeenHint = localStorage.getItem("hasSeenSwipeHint");
     if (window.innerWidth <= 768 && !hasSeenHint) {
       setTimeout(() => setShowSwipeHint(true), 3000);
     }
-
-    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   useEffect(() => {

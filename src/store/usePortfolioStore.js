@@ -48,4 +48,7 @@ export const usePortfolioStore = create((set) => ({
   
   pandaRef: null,
   setPandaRef: (ref) => set({ pandaRef: ref }),
+
+  isMobile: false,
+  setIsMobile: (status) => set({ isMobile: status }),
 }));

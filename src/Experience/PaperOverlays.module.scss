@@ -82,3 +82,30 @@
   transform: rotate(1.2deg);
   border-radius: 14px 20px 24px 16px / 18px 14px 22px 16px;
 }
+
+.pandaSpeechBubble {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 12px 20px;
+  border-radius: 18px 24px 20px 14px / 20px 18px 16px 24px;
+  border: 1.5px solid rgba(58, 53, 48, 0.2);
+  box-shadow: 2px 4px 10px rgba(0,0,0,0.15);
+  font-family: "Caveat", "Shadows Into Light", cursive;
+  font-size: 24px;
+  color: #3a3530;
+  width: 250px;
+  text-align: center;
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 10px 10px 0;
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0.95) transparent transparent transparent;
+    display: block;
+    width: 0;
+  }
+}

@@ -34,6 +34,7 @@ const Scene = ({
 }) => {
   const { size } = useThree();
   const aspect = size.width / size.height;
+  const isMobile = usePortfolioStore((state) => state.isMobile);
 
   const cameraScrollCurve = useScrollCurve(
     initialCameraCurve,
@@ -236,20 +237,22 @@ const Scene = ({
   return (
     <>
       <Suspense fallback={null}>
-        <group ref={sceneGroupRef}>
-          <MovingObjects scrollProgress={scrollProgress} />
-          <SceneOne />
-          <SceneTwo />
-          <SceneThree scrollProgress={scrollProgress} />
-          <SceneFour />
-        </group>
+        <group position={[isMobile ? 0.8 : 0, 0, 0]}>
+          <group ref={sceneGroupRef}>
+            <MovingObjects scrollProgress={scrollProgress} />
+            <SceneOne />
+            <SceneTwo />
+            <SceneThree scrollProgress={scrollProgress} />
+            <SceneFour />
+          </group>
 
-        <Panda
-          scrollProgress={scrollProgress}
-          cameraScrollCurve={cameraScrollCurve}
-        />
-        <group ref={singleSheetRef}>
-          <SingleSheet scrollProgress={scrollProgress} />
+          <Panda
+            scrollProgress={scrollProgress}
+            cameraScrollCurve={cameraScrollCurve}
+          />
+          <group ref={singleSheetRef}>
+            <SingleSheet scrollProgress={scrollProgress} />
+          </group>
         </group>
       </Suspense>
     </>

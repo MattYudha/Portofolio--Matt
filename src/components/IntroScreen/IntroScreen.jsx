@@ -64,7 +64,7 @@ const IntroScreen = () => {
             <div className={styles.spinnerRing}></div>
             <div className={styles.spinnerRingInner}></div>
             <div className={styles.pandaWrapper}>
-              <span className={styles.pandaIcon}>🐼🚴‍♂️</span>
+              <img src="/media/premium_panda.png" alt="Premium Panda Loader" className={styles.pandaIconImg} />
             </div>
           </div>
 

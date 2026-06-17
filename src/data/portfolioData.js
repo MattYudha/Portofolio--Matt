@@ -179,3 +179,12 @@ export const projectsData = [
     image: "/media/banyumas_project.png" // Fallback project image
   }
 ];
+
+export const pandaDialogue = [
+  { threshold: 0, text: "Welcome to my portfolio! Swipe or scroll to explore!" },
+  { threshold: 0.136, text: "Check out my featured products here!" },
+  { threshold: 0.306, text: "Let's review my industry experience!" },
+  { threshold: 0.501, text: "Here are some of my key technical projects!" },
+  { threshold: 0.603, text: "Need a system architect? Let's get in touch!" },
+  { threshold: 0.705, text: "Thanks for dropping by!" }
+];

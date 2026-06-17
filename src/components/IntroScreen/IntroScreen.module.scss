@@ -83,9 +83,10 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08), inset 0 0 0 1.5px rgba(255,255,255,0.6);
 }
 
-.pandaIcon {
-  font-size: 3.2rem;
-  display: inline-block;
+.pandaIconImg {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
   animation: premiumFloat 3s ease-in-out infinite;
   filter: drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.15));
 }

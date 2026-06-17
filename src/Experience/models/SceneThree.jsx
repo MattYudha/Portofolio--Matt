@@ -113,10 +113,9 @@ export default function Model({ scrollProgress, ...props }) {
         position={[8.405, 4.947, -2.744]}
         rotation={[Math.PI / 2, 0.023, 0]}
       />
+      {/* First Job Hitbox */}
       <mesh
-        ref={firstJobRef}
-        geometry={nodes.Human_Resarcher.geometry}
-        material={new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })}
+        visible={false}
         position={[8.363, 3.436, firstJobOriginalZ]}
         rotation={[Math.PI / 2, 0.073, 0]}
         onPointerEnter={() => {
@@ -131,6 +130,15 @@ export default function Model({ scrollProgress, ...props }) {
           const exp = experiencesData.find((e) => e.id === "telkom");
           if (exp) usePortfolioStore.getState().setSelectedExperience(exp);
         }}
+      >
+        <boxGeometry args={[3, 3, 2]} />
+      </mesh>
+      <mesh
+        ref={firstJobRef}
+        geometry={nodes.Human_Resarcher.geometry}
+        material={new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })}
+        position={[8.363, 3.436, firstJobOriginalZ]}
+        rotation={[Math.PI / 2, 0.073, 0]}
       >
         <Html
           transform
@@ -148,10 +156,9 @@ export default function Model({ scrollProgress, ...props }) {
           </div>
         </Html>
       </mesh>
+      {/* Second Job Hitbox */}
       <mesh
-        ref={secondJobRef}
-        geometry={nodes.Senior_Human_Researcher.geometry}
-        material={new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })}
+        visible={false}
         position={[10.062, 3.516, secondJobOriginalZ]}
         rotation={[Math.PI / 2, -0.127, 0]}
         onPointerEnter={() => {
@@ -166,6 +173,15 @@ export default function Model({ scrollProgress, ...props }) {
           const exp = experiencesData.find((e) => e.id === "aratech");
           if (exp) usePortfolioStore.getState().setSelectedExperience(exp);
         }}
+      >
+        <boxGeometry args={[3, 3, 2]} />
+      </mesh>
+      <mesh
+        ref={secondJobRef}
+        geometry={nodes.Senior_Human_Researcher.geometry}
+        material={new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })}
+        position={[10.062, 3.516, secondJobOriginalZ]}
+        rotation={[Math.PI / 2, -0.127, 0]}
       >
         <Html
           transform

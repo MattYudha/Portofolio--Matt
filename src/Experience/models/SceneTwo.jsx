@@ -97,11 +97,15 @@ export default function Model(props) {
         position={[3.313, 2.244, -2.137]}
         rotation={[Math.PI / 2, -0.124, 0]}
       />
-      <group
-        ref={treasureChestTopGroupRef}
+      <mesh
+        visible={false}
+        position={[3.33, treasureChestOriginalY, -2.126]}
         onPointerEnter={() => (treasureChestHovered.current = true)}
         onPointerLeave={() => (treasureChestHovered.current = false)}
       >
+        <boxGeometry args={[3, 3, 3]} />
+      </mesh>
+      <group ref={treasureChestTopGroupRef}>
         <mesh
           geometry={nodes.Treasure_Chest_Top.geometry}
           material={scene_2}

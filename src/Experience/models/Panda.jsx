@@ -10,6 +10,9 @@ import {
   PANDA_SHIFT_X_AMOUNT,
   pandaCurve,
 } from "../components/curve";
+import { pandaDialogue } from "../../data/portfolioData";
+import { Html } from "@react-three/drei";
+import styles from "../PaperOverlays.module.scss";
 
 export default function Model({ scrollProgress, cameraScrollCurve, ...props }) {
   const { nodes, materials } = useGLTF("/models/Panda.glb");
@@ -77,6 +80,17 @@ export default function Model({ scrollProgress, cameraScrollCurve, ...props }) {
           if (pandaRef.current) {
             pandaRef.current.material = newTexture;
           }
+        }
+        
+        let newDialogue = pandaDialogue[0].text;
+        for (let i = pandaDialogue.length - 1; i >= 0; i--) {
+          if (currentProgress >= pandaDialogue[i].threshold) {
+            newDialogue = pandaDialogue[i].text;
+            break;
+          }
+        }
+        if (newDialogue !== currentDialogue) {
+          setCurrentDialogue(newDialogue);
         }
       }
 
@@ -147,6 +161,8 @@ export default function Model({ scrollProgress, cameraScrollCurve, ...props }) {
     }
   });
 
+  const [currentDialogue, setCurrentDialogue] = useState(pandaDialogue[0].text);
+
   return (
     <group {...props} dispose={null}>
       <mesh
@@ -156,7 +172,22 @@ export default function Model({ scrollProgress, cameraScrollCurve, ...props }) {
         position={[-20.664, -5.242, -1.466]}
         rotation={[Math.PI, 0, Math.PI]}
         scale={[1, 1, 1]}
-      />
+      >
+        <Html
+          position={[0, 3, 0]}
+          center
+          style={{
+            pointerEvents: "none",
+            transition: "opacity 0.3s ease",
+            opacity: scrollProgress.current > 0.98 ? 0 : 1
+          }}
+          zIndexRange={[100, 0]}
+        >
+          <div className={styles.pandaSpeechBubble}>
+            {currentDialogue}
+          </div>
+        </Html>
+      </mesh>
     </group>
   );
 }

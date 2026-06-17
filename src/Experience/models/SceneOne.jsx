@@ -144,14 +144,22 @@ export default function Model(props) {
         position={[-3.974, 3.587, -2.409]}
         rotation={[Math.PI / 2, -0.19, 0]}
       />
+      {/* Mrs Panda Hitbox */}
+      <mesh
+        visible={false}
+        position={[-5.746, 0.854, -2.671]}
+        rotation={[-1.501, mrsPandaOriginalRotY, -3.093]}
+        onPointerEnter={() => (mrsPandaHovered.current = true)}
+        onPointerLeave={() => (mrsPandaHovered.current = false)}
+      >
+        <boxGeometry args={[3, 3, 3]} />
+      </mesh>
       <mesh
         ref={mrsPandaRef}
         geometry={nodes.Plane116.geometry}
         material={scene_1}
         position={[-5.746, 0.854, -2.671]}
         rotation={[-1.501, mrsPandaOriginalRotY, -3.093]}
-        onPointerEnter={() => (mrsPandaHovered.current = true)}
-        onPointerLeave={() => (mrsPandaHovered.current = false)}
       />
       <mesh
         geometry={nodes.Plane124.geometry}
@@ -272,10 +280,9 @@ export default function Model(props) {
         position={[-7.867, 2.012, -2.444]}
         rotation={[Math.PI / 2, 0.025, 0]}
       />
+      {/* Intro Paper Hitbox */}
       <mesh
-        ref={introRef}
-        geometry={nodes.intro.geometry}
-        material={new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })}
+        visible={false}
         position={[-17.941, 2.096, introOriginalZ]}
         rotation={[Math.PI / 2, 0.025, 0]}
         onPointerEnter={() => {
@@ -302,6 +309,15 @@ export default function Model(props) {
           });
         }}
       >
+        <boxGeometry args={[3, 3, 2]} />
+      </mesh>
+      <mesh
+        ref={introRef}
+        geometry={nodes.intro.geometry}
+        material={new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })}
+        position={[-17.941, 2.096, introOriginalZ]}
+        rotation={[Math.PI / 2, 0.025, 0]}
+      >
         <Html
           transform
           position={[0, 0, 0.1]}
@@ -316,10 +332,9 @@ export default function Model(props) {
           </div>
         </Html>
       </mesh>
+      {/* About Paper Hitbox */}
       <mesh
-        ref={aboutRef}
-        geometry={nodes.about.geometry}
-        material={new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })}
+        visible={false}
         position={[-15.7, 1.987, aboutOriginalZ]}
         rotation={[Math.PI / 2, 0.025, 0]}
         onPointerEnter={() => {
@@ -345,6 +360,15 @@ export default function Model(props) {
             ]
           });
         }}
+      >
+        <boxGeometry args={[3, 3, 2]} />
+      </mesh>
+      <mesh
+        ref={aboutRef}
+        geometry={nodes.about.geometry}
+        material={new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })}
+        position={[-15.7, 1.987, aboutOriginalZ]}
+        rotation={[Math.PI / 2, 0.025, 0]}
       >
         <Html
           transform
