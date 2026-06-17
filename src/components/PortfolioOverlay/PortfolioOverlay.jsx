@@ -26,9 +26,105 @@ const GlassCard = ({ children, isCardMinimized, setIsCardMinimized }) => {
   );
 };
 
+const ScrollProgressText = () => {
+  const scrollProgress = usePortfolioStore((state) => state.scrollProgress);
+  return <span>Scroll / Drag to Journey ({Math.round(scrollProgress * 100)}%)</span>;
+};
+
+const HomePanel = ({ isCardMinimized, setIsCardMinimized, shouldShowCard, activeSection }) => {
+  const scrollProgress = usePortfolioStore((state) => state.scrollProgress);
+
+  if (activeSection !== "home" || !shouldShowCard) return null;
+
+  const isHidden = scrollProgress >= 0.10;
+  const isMobileStartHidden = scrollProgress < 0.04;
+
+  return (
+    <section className={`${styles.panel} ${styles.panelLeft} ${styles.fadeIn} ${isHidden ? styles.cardHidden : ""} ${isMobileStartHidden ? styles.mobileStartHidden : ""}`}>
+      <GlassCard isCardMinimized={isCardMinimized} setIsCardMinimized={setIsCardMinimized}>
+        <div className={styles.cardHeader}>
+          <span className={styles.badge}>Full-stack Mobile Developer Swift / Flutter</span>
+          <h2>About Matt</h2>
+        </div>
+        <p className={styles.bioText}>{profileData.about}</p>
+
+        <div className={styles.cardDivider} />
+
+        <div className={styles.educationGroup}>
+          <h4>Education</h4>
+          <div className={styles.eduDetails}>
+            <strong>{profileData.education.degree}</strong>
+            <span>{profileData.education.school ? `${profileData.education.school} • ` : ""}{profileData.education.period}</span>
+            <span className={styles.gpa}>GPA: {profileData.education.gpa}</span>
+          </div>
+        </div>
+
+        <div className={styles.skillsGroup}>
+          <h4>Technical Arsenal</h4>
+          <div className={styles.skillsTags}>
+            {profileData.skills.languages.slice(0, 5).map((lang) => (
+              <span key={lang} className={styles.langTag}>{lang}</span>
+            ))}
+            {profileData.skills.frontend.slice(0, 3).map((tech) => (
+              <span key={tech} className={styles.feTag}>{tech}</span>
+            ))}
+            {profileData.skills.backend.slice(0, 3).map((tech) => (
+              <span key={tech} className={styles.beTag}>{tech}</span>
+            ))}
+          </div>
+        </div>
+      </GlassCard>
+    </section>
+  );
+};
+
+const MobilePrompt = ({ mobileConfirmations, setMobileConfirmations, sectionPrompts }) => {
+  const isMobile = usePortfolioStore((state) => state.isMobile);
+  const activeSection = usePortfolioStore((state) => state.activeSection);
+  const scrollProgress = usePortfolioStore((state) => state.scrollProgress);
+
+  const isPromptReady = activeSection !== "home" || scrollProgress >= 0.04;
+  const showPrompt = isMobile && mobileConfirmations[activeSection] === null && isPromptReady && sectionPrompts[activeSection];
+
+  useEffect(() => {
+    usePortfolioStore.getState().setIsPromptOpen(!!showPrompt);
+    return () => {
+      usePortfolioStore.getState().setIsPromptOpen(false);
+    };
+  }, [showPrompt]);
+
+  if (!showPrompt) return null;
+
+  return (
+    <div className={`${styles.mobilePromptContainer} ${styles.fadeIn}`}>
+      <p className={styles.mobilePromptText}>{sectionPrompts[activeSection]}</p>
+      <div className={styles.mobilePromptActions}>
+        <button
+          className={styles.promptBtnYes}
+          onClick={() => setMobileConfirmations(prev => ({ ...prev, [activeSection]: true }))}
+        >
+          Ya
+        </button>
+        <button
+          className={styles.promptBtnNo}
+          onClick={() => setMobileConfirmations(prev => ({ ...prev, [activeSection]: false }))}
+        >
+          Tidak
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const PortfolioOverlay = () => {
-  const { activeSection, scrollProgress, setSelectedProject, setSelectedExperience, isLoaded, isMobile } = usePortfolioStore();
+
+  const activeSection = usePortfolioStore((state) => state.activeSection);
+  const setSelectedProject = usePortfolioStore((state) => state.setSelectedProject);
+  const setSelectedExperience = usePortfolioStore((state) => state.setSelectedExperience);
+  const isLoaded = usePortfolioStore((state) => state.isLoaded);
+  const isMobile = usePortfolioStore((state) => state.isMobile);
   const [formSubmitted, setFormSubmitted] = useState(false);
+
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [isCardMinimized, setIsCardMinimized] = useState(false);
   const [showSwipeHint, setShowSwipeHint] = useState(false);
@@ -39,6 +135,18 @@ const PortfolioOverlay = () => {
     "projects-2": null,
     contact: null
   });
+
+  const isNightMode = usePortfolioStore((state) => state.isNightMode);
+  const toggleNightMode = usePortfolioStore((state) => state.toggleNightMode);
+
+  // Apply night-mode class to body for global styling overrides
+  useEffect(() => {
+    if (isNightMode) {
+      document.body.classList.add("night-mode");
+    } else {
+      document.body.classList.remove("night-mode");
+    }
+  }, [isNightMode]);
 
   const sectionPrompts = {
     home: "Ingin melihat info profil Rahmat?",
@@ -74,13 +182,8 @@ const PortfolioOverlay = () => {
     }));
   }, [activeSection]);
 
-  const isPromptReady = activeSection !== "home" || scrollProgress >= 0.04;
   const shouldShowCard = !isMobile || mobileConfirmations[activeSection] === true;
-  const showPrompt = isMobile && mobileConfirmations[activeSection] === null && isPromptReady && sectionPrompts[activeSection];
 
-  useEffect(() => {
-    usePortfolioStore.getState().setIsPromptOpen(!!showPrompt);
-  }, [showPrompt]);
 
   if (!isLoaded) return null;
 
@@ -146,6 +249,14 @@ const PortfolioOverlay = () => {
               {item.label}
             </button>
           ))}
+          <button
+            className={styles.navItem}
+            onClick={toggleNightMode}
+            title="Toggle Night Mode"
+            style={{ fontSize: "1.2rem", padding: "0.4rem 0.6rem" }}
+          >
+            {isNightMode ? "☀️" : "🌙"}
+          </button>
         </nav>
 
         <div className={styles.socials}>
@@ -186,43 +297,13 @@ const PortfolioOverlay = () => {
       {/* Main Dynamic Panel Overlays */}
       <main className={styles.mainContent}>
         {/* PROFILE SECTION (LEFT PANEL) */}
-        {activeSection === "home" && shouldShowCard && (
-          <section className={`${styles.panel} ${styles.panelLeft} ${styles.fadeIn} ${scrollProgress >= 0.10 ? styles.cardHidden : ""} ${scrollProgress < 0.04 ? styles.mobileStartHidden : ""}`}>
-            <GlassCard isCardMinimized={isCardMinimized} setIsCardMinimized={setIsCardMinimized}>
-              <div className={styles.cardHeader}>
-                <span className={styles.badge}>Full-stack Mobile Developer Swift / Flutter</span>
-                <h2>About Matt</h2>
-              </div>
-              <p className={styles.bioText}>{profileData.about}</p>
+        <HomePanel
+          isCardMinimized={isCardMinimized}
+          setIsCardMinimized={setIsCardMinimized}
+          shouldShowCard={shouldShowCard}
+          activeSection={activeSection}
+        />
 
-              <div className={styles.cardDivider} />
-
-              <div className={styles.educationGroup}>
-                <h4>Education</h4>
-                <div className={styles.eduDetails}>
-                  <strong>{profileData.education.degree}</strong>
-                  <span>{profileData.education.school ? `${profileData.education.school} • ` : ""}{profileData.education.period}</span>
-                  <span className={styles.gpa}>GPA: {profileData.education.gpa}</span>
-                </div>
-              </div>
-
-              <div className={styles.skillsGroup}>
-                <h4>Technical Arsenal</h4>
-                <div className={styles.skillsTags}>
-                  {profileData.skills.languages.slice(0, 5).map((lang) => (
-                    <span key={lang} className={styles.langTag}>{lang}</span>
-                  ))}
-                  {profileData.skills.frontend.slice(0, 3).map((tech) => (
-                    <span key={tech} className={styles.feTag}>{tech}</span>
-                  ))}
-                  {profileData.skills.backend.slice(0, 3).map((tech) => (
-                    <span key={tech} className={styles.beTag}>{tech}</span>
-                  ))}
-                </div>
-              </div>
-            </GlassCard>
-          </section>
-        )}
 
         {/* PRODUCTS SECTION 1 (RIGHT PANEL) */}
         {activeSection === "projects-1" && shouldShowCard && (
@@ -388,25 +469,12 @@ const PortfolioOverlay = () => {
       </main>
 
       {/* Mobile Scroll Confirmation Prompt */}
-      {showPrompt && (
-        <div className={`${styles.mobilePromptContainer} ${styles.fadeIn}`}>
-          <p className={styles.mobilePromptText}>{sectionPrompts[activeSection]}</p>
-          <div className={styles.mobilePromptActions}>
-            <button
-              className={styles.promptBtnYes}
-              onClick={() => setMobileConfirmations(prev => ({ ...prev, [activeSection]: true }))}
-            >
-              Ya
-            </button>
-            <button
-              className={styles.promptBtnNo}
-              onClick={() => setMobileConfirmations(prev => ({ ...prev, [activeSection]: false }))}
-            >
-              Tidak
-            </button>
-          </div>
-        </div>
-      )}
+      <MobilePrompt
+        mobileConfirmations={mobileConfirmations}
+        setMobileConfirmations={setMobileConfirmations}
+        sectionPrompts={sectionPrompts}
+      />
+
 
       {/* Floating Bottom Navigator / Scroll Guide */}
       {showSwipeHint && (
@@ -438,8 +506,9 @@ const PortfolioOverlay = () => {
             <div className={styles.mouseWheel}>
               <div className={styles.wheelDot} />
             </div>
-            <span>Scroll / Drag to Journey ({Math.round(scrollProgress * 100)}%)</span>
+            <ScrollProgressText />
           </div>
+
         )}
       </footer>
     </div>

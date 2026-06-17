@@ -11,19 +11,21 @@ import {
   pandaCurve,
 } from "../components/curve";
 import { pandaDialogue } from "../../data/portfolioData";
-import { Html } from "@react-three/drei";
+import { Html, ContactShadows } from "@react-three/drei";
 import styles from "../PaperOverlays.module.scss";
 
 export default function Model({ scrollProgress, cameraScrollCurve, ...props }) {
   const { nodes, materials } = useGLTF("/models/Panda.glb");
-  const regular = useKTX2Texture("/textures/regular.ktx2");
-  const samurai = useKTX2Texture("/textures/samurai.ktx2");
-  const pirate = useKTX2Texture("/textures/pirate.ktx2");
-  const desert = useKTX2Texture("/textures/desert.ktx2");
-  const zombie = useKTX2Texture("/textures/zombie.ktx2");
+  const regular = useKTX2Texture("/textures/regular.ktx2", true, 0.6, "front", "standard");
+  const samurai = useKTX2Texture("/textures/samurai.ktx2", true, 0.6, "front", "standard");
+  const pirate = useKTX2Texture("/textures/pirate.ktx2", true, 0.6, "front", "standard");
+  const desert = useKTX2Texture("/textures/desert.ktx2", true, 0.6, "front", "standard");
+  const zombie = useKTX2Texture("/textures/zombie.ktx2", true, 0.6, "front", "standard");
   const pandaRef = useRef();
+  const shadowRef = useRef();
 
   const setPandaRef = usePortfolioStore((state) => state.setPandaRef);
+  const isNightMode = usePortfolioStore((state) => state.isNightMode);
 
   useEffect(() => {
     if (pandaRef.current) {
@@ -158,6 +160,59 @@ export default function Model({ scrollProgress, cameraScrollCurve, ...props }) {
       pandaRef.current.rotation.x = Math.PI + randomOffset.rotation.x;
       pandaRef.current.rotation.y = 0 + randomOffset.rotation.y;
       pandaRef.current.rotation.z = Math.PI + randomOffset.rotation.z;
+
+      if (shadowRef.current) {
+        shadowRef.current.position.x = pandaRef.current.position.x;
+        shadowRef.current.position.z = pandaRef.current.position.z;
+      }
+      
+      // Calculate light proximity glow for the Panda itself
+      if (pandaRef.current.material && isNightMode !== undefined) {
+        let targetEmissiveColor = new THREE.Color("#000000");
+        let targetEmissiveIntensity = 0;
+        
+        if (isNightMode) {
+          const px = pandaRef.current.position.x;
+          
+          // Check Gothic Lantern
+          const distGothic = Math.abs(px - 20.5);
+          if (distGothic < 8.0) {
+             let factor = 1.0 - (distGothic / 8.0);
+             factor = Math.pow(factor, 1.5);
+             targetEmissiveColor.set("#b2ff59"); // Green
+             targetEmissiveIntensity = factor * 2.0;
+          }
+          
+          // Check Desert Torch
+          const distDesert = Math.abs(px - 8.0);
+          if (distDesert < 8.0) {
+             let factor = 1.0 - (distDesert / 8.0);
+             factor = Math.pow(factor, 1.5);
+             targetEmissiveColor.set("#ff6d00"); // Orange
+             if (factor * 2.0 > targetEmissiveIntensity) {
+               targetEmissiveColor.set("#ff6d00");
+               targetEmissiveIntensity = factor * 2.0;
+             }
+          }
+          
+          // Check Street Light
+          const distStreet = Math.abs(px - -4.5);
+          if (distStreet < 8.0) {
+             let factor = 1.0 - (distStreet / 8.0);
+             factor = Math.pow(factor, 1.5);
+             if (factor * 2.0 > targetEmissiveIntensity) {
+               targetEmissiveColor.set("#ffcc00"); // Yellow
+               targetEmissiveIntensity = factor * 2.0;
+             }
+          }
+        }
+        
+        const mat = pandaRef.current.material;
+        if (mat.emissive) {
+          mat.emissive.lerp(targetEmissiveColor, 0.1);
+          mat.emissiveIntensity = THREE.MathUtils.lerp(mat.emissiveIntensity || 0, targetEmissiveIntensity, 0.1);
+        }
+      }
     }
   });
 
@@ -173,7 +228,11 @@ export default function Model({ scrollProgress, cameraScrollCurve, ...props }) {
         position={[-20.664, -5.242, -1.466]}
         rotation={[Math.PI, 0, Math.PI]}
         scale={[1, 1, 1]}
+        castShadow
+        receiveShadow
+        userData={{ skipTint: true }}
       >
+
         <Html
           position={[0, 3, 0]}
           center
@@ -189,6 +248,18 @@ export default function Model({ scrollProgress, cameraScrollCurve, ...props }) {
           </div>
         </Html>
       </mesh>
+      
+      {/* Dynamic Fake Shadow */}
+      <ContactShadows
+        ref={shadowRef}
+        position={[-20.664, -5.24, -1.466]}
+        opacity={0.8}
+        scale={6}
+        blur={2}
+        far={10}
+        resolution={256}
+        color="#000000"
+      />
     </group>
   );
 }

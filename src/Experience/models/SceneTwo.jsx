@@ -10,7 +10,7 @@ import { useFrame } from "@react-three/fiber";
 export default function Model(props) {
   const { nodes, materials } = useGLTF("/models/scene_2.glb");
 
-  const scene_2 = useKTX2Texture("/textures/scene_2.ktx2");
+  const scene_2 = useKTX2Texture("/textures/scene_2.ktx2", true, 0.6, "front", "standard", false);
 
   const oceanOne = useRef();
   const oceanTwo = useRef();

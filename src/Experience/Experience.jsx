@@ -6,7 +6,14 @@ import * as THREE from "three";
 import normalizeWheel from "normalize-wheel";
 import { usePortfolioStore } from "../store/usePortfolioStore";
 
+import Flashlight from "./components/Flashlight";
+
+
+
 const Experience = () => {
+  const isNightMode = usePortfolioStore((state) => state.isNightMode);
+  const isMobile = usePortfolioStore((state) => state.isMobile);
+
   const camera = useRef();
   const cameraGroup = useRef();
   const scrollProgress = useRef(0);
@@ -14,6 +21,7 @@ const Experience = () => {
   const baseScrollSpeed = 0.0085;
   const scrollSpeedMultiplier = useRef(1);
   const lerpFactor = 0.1;
+
   const isSwiping = useRef(false);
   const mousePositionOffset = useRef(new THREE.Vector3());
   const mouseRotationOffset = useRef(new THREE.Euler());
@@ -163,6 +171,9 @@ const Experience = () => {
         scrollSpeedMultiplier={scrollSpeedMultiplier}
       />
 
+
+
+
       <group ref={cameraGroup}>
         <PerspectiveCamera
           ref={camera}
@@ -170,9 +181,12 @@ const Experience = () => {
           fov={35}
           // position={[0, 0, 30]}
         />
+        <Flashlight />
         {/* <OrbitControls enableZoom={false} enableRotate={false} /> */}
       </group>
+
     </Canvas>
+
   );
 };
 

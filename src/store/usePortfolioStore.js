@@ -54,4 +54,7 @@ export const usePortfolioStore = create((set) => ({
 
   isPromptOpen: false,
   setIsPromptOpen: (status) => set({ isPromptOpen: status }),
+
+  isNightMode: false,
+  toggleNightMode: () => set((state) => ({ isNightMode: !state.isNightMode })),
 }));

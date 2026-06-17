@@ -7,6 +7,7 @@ import * as THREE from "three";
 import { usePortfolioStore } from "../../store/usePortfolioStore";
 import { experiencesData } from "../../data/portfolioData";
 import styles from "../PaperOverlays.module.scss";
+import DesertTorch from "../components/DesertTorch";
 
 export default function Model({ scrollProgress, ...props }) {
   const { nodes, materials } = useGLTF("/models/scene_3.glb");
@@ -29,7 +30,7 @@ export default function Model({ scrollProgress, ...props }) {
 
   const lerpFactor = 0.08;
 
-  const scene_3 = useKTX2Texture("/textures/scene_3.ktx2");
+  const scene_3 = useKTX2Texture("/textures/scene_3.ktx2", true, 0.6, "front", "standard", false);
 
   useFrame(() => {
     if (pyramidDoorRef.current) {
@@ -146,8 +147,8 @@ export default function Model({ scrollProgress, ...props }) {
           rotation={[-Math.PI / 2, 0, 0]}
           scale={0.12}
           pointerEvents="none"
-          occlude="blending"
         >
+
           <div className={`${styles.paperNote} ${styles.jobNote} ${styles.telkomNote}`} data-prevent-scroll="true">
             <h3>Software Engineer</h3>
             <h4>Telkom Indonesia</h4>
@@ -189,8 +190,8 @@ export default function Model({ scrollProgress, ...props }) {
           rotation={[-Math.PI / 2, 0, 0]}
           scale={0.12}
           pointerEvents="none"
-          occlude="blending"
         >
+
           <div className={`${styles.paperNote} ${styles.jobNote} ${styles.aratechNote}`} data-prevent-scroll="true">
             <h3>Full-stack Mobile Developer</h3>
             <h4>Emran Ghanim Asahi</h4>
@@ -221,6 +222,9 @@ export default function Model({ scrollProgress, ...props }) {
         material={scene_3}
         position={[12.525, 3.395, -0.222]}
       />
+
+      {/* Desert Torch — Egyptian style */}
+      <DesertTorch position={[8.0, 2.2, -2.2]} scale={0.55} />
     </group>
   );
 }

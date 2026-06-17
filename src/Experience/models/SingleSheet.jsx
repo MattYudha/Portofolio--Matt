@@ -14,9 +14,11 @@ import { projectsData } from "../../data/portfolioData";
 
 export default function Model({ scrollProgress, ...props }) {
   const { nodes, materials } = useGLTF("/models/single_sheet.glb");
+  const isNightMode = usePortfolioStore((state) => state.isNightMode);
 
-  const singlesheet = useKTX2Texture("/textures/single_sheet.ktx2");
-  const kpop = useKTX2Texture("/textures/kpop.ktx2");
+  const singlesheet = useKTX2Texture("/textures/single_sheet.ktx2", true, 0.6, "front", "standard");
+  const kpop = useKTX2Texture("/textures/kpop.ktx2", true, 0.6, "front", "standard");
+
 
   const kpopRumiRef = useRef();
   const kpopSignRef = useRef();
@@ -172,7 +174,18 @@ export default function Model({ scrollProgress, ...props }) {
           randomOffsets.kpopSign.rotation.z
       );
     }
+
+    if (kpop) {
+      kpop.emissive = new THREE.Color(isNightMode ? "#22d3ee" : "#000000"); // Cyan-400
+      kpop.emissiveIntensity = THREE.MathUtils.lerp(
+        kpop.emissiveIntensity,
+        isNightMode ? 1.2 : 0.0,
+        0.15
+      );
+    }
   });
+
+
 
   return (
     <group {...props} dispose={null}>
@@ -181,36 +194,42 @@ export default function Model({ scrollProgress, ...props }) {
         material={singlesheet}
         position={[28.345 - SHIFT_X_AMOUNT, 4.634, -2.755]}
         rotation={[Math.PI / 2, 0, 0]}
+        userData={{ skipTint: true }}
       />
       <mesh
         geometry={nodes.Single_Sheet_Baked.geometry}
         material={singlesheet}
         position={[35.245 - SHIFT_X_AMOUNT, 4.634, -2.755]}
         rotation={[Math.PI / 2, 0, 0]}
+        userData={{ skipTint: true }}
       />
       <mesh
         geometry={nodes.Single_Sheet_Baked.geometry}
         material={singlesheet}
         position={[28.345 - SHIFT_X_AMOUNT, -3.42, -2.755]}
         rotation={[Math.PI / 2, 0, 0]}
+        userData={{ skipTint: true }}
       />
       <mesh
         geometry={nodes.Single_Sheet_Baked.geometry}
         material={singlesheet}
         position={[28.345 - SHIFT_X_AMOUNT - 6.9, -3.42, -2.755]}
         rotation={[Math.PI / 2, 0, 0]}
+        userData={{ skipTint: true }}
       />
       <mesh
         geometry={nodes.Single_Sheet_Baked.geometry}
         material={singlesheet}
         position={[35.245 - SHIFT_X_AMOUNT, -3.42, -2.755]}
         rotation={[Math.PI / 2, 0, 0]}
+        userData={{ skipTint: true }}
       />
       <mesh
         geometry={nodes.Single_Sheet_Baked.geometry}
         material={singlesheet}
         position={[35.245 - SHIFT_X_AMOUNT + 6.9, -3.42, -2.755]}
         rotation={[Math.PI / 2, 0, 0]}
+        userData={{ skipTint: true }}
       />
 
       <group ref={kpopRumiGroupRef}>
@@ -236,6 +255,7 @@ export default function Model({ scrollProgress, ...props }) {
           material={kpop}
           scale={[-0.999, -1, -0.447]}
           rotation={[0, Math.PI, 0]}
+          userData={{ skipTint: true }}
         />
       </group>
 
@@ -262,9 +282,11 @@ export default function Model({ scrollProgress, ...props }) {
           material={kpop}
           scale={[0.999, 1, 0.574]}
           rotation={[0, Math.PI, 0]}
+          userData={{ skipTint: true }}
         />
       </group>
     </group>
+
   );
 }
 

@@ -4,10 +4,16 @@ import { useKTX2Texture } from "../utils/ktxLoader";
 import { useFrame } from "@react-three/fiber";
 import { usePortfolioStore } from "../../store/usePortfolioStore";
 import { projectsData } from "../../data/portfolioData";
+import * as THREE from "three";
+import GothicLantern from "../components/GothicLantern";
+
 
 export default function Model(props) {
   const { nodes, materials } = useGLTF("/models/scene_4.glb");
-  const scene_4 = useKTX2Texture("/textures/scene_4.ktx2");
+  const isNightMode = usePortfolioStore((state) => state.isNightMode);
+  const scene_4 = useKTX2Texture("/textures/scene_4.ktx2", true, 0.6, "front", "standard", false);
+  const scene_4_standard = useKTX2Texture("/textures/scene_4.ktx2", true, 0.6, "front", "standard");
+
 
   const ghostRef = useRef();
   const zombieHandRef = useRef();
@@ -55,7 +61,18 @@ export default function Model(props) {
       secondPaperRef.current.position.z +=
         (targetZ - secondPaperRef.current.position.z) * lerpFactor;
     }
+
+    if (scene_4_standard) {
+      scene_4_standard.emissive = new THREE.Color(isNightMode ? "#22d3ee" : "#000000"); // Cyan-400
+      scene_4_standard.emissiveIntensity = THREE.MathUtils.lerp(
+        scene_4_standard.emissiveIntensity,
+        isNightMode ? 1.2 : 0.0,
+        0.15
+      );
+    }
   });
+
+
 
   return (
     <group {...props} dispose={null}>
@@ -108,10 +125,12 @@ export default function Model(props) {
       <mesh
         ref={firstPaperRef}
         geometry={nodes.Plane125.geometry}
-        material={scene_4}
+        material={scene_4_standard}
         position={[16.29, 3.282, firstPaperOriginalZ]}
         rotation={[Math.PI / 2, -0.007, 0]}
+        userData={{ skipTint: true }}
       />
+
 
       {/* Second Paper Hitbox */}
       <mesh
@@ -137,9 +156,10 @@ export default function Model(props) {
       <mesh
         ref={secondPaperRef}
         geometry={nodes.Plane126.geometry}
-        material={scene_4}
+        material={scene_4_standard}
         position={[17.918, 4.052, secondPaperOriginalZ]}
         rotation={[Math.PI / 2, -0.114, 0]}
+        userData={{ skipTint: true }}
       />
       <mesh
         geometry={nodes.Plane127.geometry}
@@ -177,6 +197,9 @@ export default function Model(props) {
         position={[-20.599, 4.634, -2.755]}
         rotation={[Math.PI / 2, 0, 0]}
       />
+
+      {/* Gothic Lantern — Spooky green light */}
+      <GothicLantern position={[20.5, 2.2, -2.2]} scale={0.55} />
     </group>
   );
 }

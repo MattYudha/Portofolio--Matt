@@ -1050,3 +1050,65 @@
   }
 }
 
+// ============================================
+// NIGHT MODE OVERRIDES
+// ============================================
+:global(.night-mode) .overlayContainer {
+  color: #e2e8f0; // slate-200
+
+  .glassCard, .logoContainer, .nav, .timelineContent, .mobilePromptContainer, input, textarea, .scrollIndicator, .slideArrow {
+    background-color: rgba(15, 23, 42, 0.85) !important; // Dark Blue / Midnight Blue
+    border-color: rgba(148, 163, 184, 0.25) !important;
+    color: #e2e8f0 !important;
+  }
+
+  h2, h4, .logoName, .timelineContent h4, .projectItemCard h4, .cardHeader h2, strong, .badge, .navItem, .promptBtnYes {
+    color: #f8fafc !important;
+  }
+
+  .logoTitle, .instructionText, .timelineDate, .timelineContent h5, .projectItemCard p, .scrollIndicator, p, a, span, .promptBtnNo, label {
+    color: #cbd5e1 !important;
+  }
+
+  .navActive {
+    background: rgba(56, 189, 248, 0.3) !important; 
+    color: #f8fafc !important;
+  }
+
+  .socials a {
+    background-color: rgba(15, 23, 42, 0.85) !important;
+    color: #e2e8f0 !important;
+    &:hover {
+      background-color: rgba(56, 189, 248, 0.4) !important;
+    }
+  }
+
+  .badge, .gpa, .langTag, .feTag, .beTag, .submitBtn, .promptBtnYes {
+    background: rgba(30, 64, 175, 0.5) !important; // blue-800
+    color: #e2e8f0 !important;
+  }
+
+  .projectItemCard, .contactItem {
+    background-color: rgba(30, 41, 59, 0.6) !important; // slate-800
+  }
+
+  .timelineBullet {
+    background: rgba(15, 23, 42, 0.9) !important;
+  }
+  
+  .timelineItem:hover .timelineBullet {
+    background: rgba(56, 189, 248, 0.7) !important;
+  }
+  
+  .dot {
+    background-color: rgba(15, 23, 42, 0.6) !important;
+    border-color: #cbd5e1 !important;
+  }
+  .dotActive {
+    background-color: rgba(56, 189, 248, 0.8) !important;
+  }
+  .wheelDot {
+    background: #cbd5e1 !important;
+  }
+}
+

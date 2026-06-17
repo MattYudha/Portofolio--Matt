@@ -6,6 +6,7 @@ import * as THREE from "three";
 import { usePortfolioStore } from "../../store/usePortfolioStore";
 import { profileData } from "../../data/portfolioData";
 import styles from "../PaperOverlays.module.scss";
+import StreetLight from "../components/StreetLight";
 
 export default function Model(props) {
   const { nodes, materials } = useGLTF("/models/scene_1.glb");
@@ -49,16 +50,18 @@ export default function Model(props) {
 
   const lerpFactor = 0.08;
 
-  const waterfallone = useKTX2Texture("/textures/waterfall_one.ktx2");
-  const waterfalltwo = useKTX2Texture("/textures/waterfall_two.ktx2");
+  const waterfallone = useKTX2Texture("/textures/waterfall_one.ktx2", true, 0.6, "front", "standard", false);
+  const waterfalltwo = useKTX2Texture("/textures/waterfall_two.ktx2", true, 0.6, "front", "standard", false);
   const not_waterfall = useKTX2Texture(
     "/textures/not_waterfall.ktx2",
     true,
     0.6,
-    "double"
+    "double",
+    "standard",
+    false
   );
-  const scene_1_bg = useKTX2Texture("/textures/scene_1_bg.ktx2");
-  const scene_1 = useKTX2Texture("/textures/scene_1.ktx2");
+  const scene_1_bg = useKTX2Texture("/textures/scene_1_bg.ktx2", true, 0.6, "front", "standard", false);
+  const scene_1 = useKTX2Texture("/textures/scene_1.ktx2", true, 0.6, "front", "standard", false);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
@@ -144,6 +147,10 @@ export default function Model(props) {
         position={[-3.974, 3.587, -2.409]}
         rotation={[Math.PI / 2, -0.19, 0]}
       />
+      
+      {/* Traditional Japanese Lantern Street Light */}
+      <StreetLight position={[-4.5, 0.5, -0.2]} scale={0.55} />
+
       {/* Mrs Panda Hitbox */}
       <mesh
         visible={false}
@@ -324,8 +331,8 @@ export default function Model(props) {
           rotation={[-Math.PI / 2, 0, 0]}
           scale={0.15}
           pointerEvents="none"
-          occlude="blending"
         >
+
           <div className={`${styles.paperNote} ${styles.introNote}`} data-prevent-scroll="true">
             <h3>Welcome to my portfolio!!</h3>
             <p>~ {profileData.name}<br/>p.s. I ❤ building things!!</p>
@@ -376,8 +383,8 @@ export default function Model(props) {
           rotation={[-Math.PI / 2, 0, 0]}
           scale={0.15}
           pointerEvents="none"
-          occlude="blending"
         >
+
           <div className={`${styles.paperNote} ${styles.aboutNote}`} data-prevent-scroll="true">
             <h3>I am a mobile developer</h3>
             <p>trying to build cool stuff &amp; solve real problems. They are very challenging; not simple and easy like tutorials. Future projects are needed.</p>

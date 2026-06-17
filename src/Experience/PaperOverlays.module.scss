@@ -109,3 +109,57 @@
     width: 0;
   }
 }
+
+// Night Mode overrides for 3D paper overlays
+:global(.night-mode) {
+  .paperNote {
+    background-color: rgba(15, 23, 42, 0.9) !important; // Deep slate
+    color: #e2e8f0 !important;
+    border-color: rgba(56, 189, 248, 0.4) !important; // blue/cyan glow border
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.2), 3px 5px 12px rgba(0, 0, 0, 0.4);
+
+    h3 {
+      color: #f8fafc !important;
+    }
+    p {
+      color: #cbd5e1 !important;
+    }
+  }
+
+  .aboutNote {
+    background-color: rgba(30, 41, 59, 0.85) !important;
+    border-color: rgba(251, 191, 36, 0.4) !important; // amber glow border
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.15), 3px 5px 12px rgba(0, 0, 0, 0.4);
+  }
+
+  .telkomNote {
+    background-color: rgba(30, 41, 59, 0.85) !important;
+    border-color: rgba(56, 189, 248, 0.4) !important; // cyan/blue glow border
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.15), 3px 5px 12px rgba(0, 0, 0, 0.4);
+    
+    h4 {
+      color: #cbd5e1 !important;
+    }
+  }
+
+  .aratechNote {
+    background-color: rgba(30, 41, 59, 0.85) !important;
+    border-color: rgba(34, 197, 94, 0.4) !important; // green glow border
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.15), 3px 5px 12px rgba(0, 0, 0, 0.4);
+
+    h4 {
+      color: #cbd5e1 !important;
+    }
+  }
+
+  .pandaSpeechBubble {
+    background-color: rgba(15, 23, 42, 0.95) !important;
+    color: #e2e8f0 !important;
+    border-color: rgba(148, 163, 184, 0.3) !important;
+    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.3);
+
+    &::after {
+      border-color: rgba(15, 23, 42, 0.95) transparent transparent transparent !important;
+    }
+  }
+}

@@ -8,6 +8,8 @@ import SceneThree from "./models/SceneThree";
 import SceneFour from "./models/SceneFour";
 import SingleSheet from "./models/SingleSheet";
 import Panda from "./models/Panda";
+import Campfire from "./components/Campfire";
+import Fireflies from "./components/Fireflies";
 import {
   cameraCurve as initialCameraCurve,
   initialCameraPoints,
@@ -16,6 +18,8 @@ import {
 } from "./components/curve";
 import { useScrollCurve } from "./hooks/useScrollCurve";
 import { usePortfolioStore } from "../store/usePortfolioStore";
+import { globalMaterialsRegistry } from "./utils/ktxLoader";
+
 
 const WORLD_FORWARD_TRIGGER = 0.92;
 const WORLD_BACK_TRIGGER = 0.91;
@@ -35,6 +39,7 @@ const Scene = ({
   const { size } = useThree();
   const aspect = size.width / size.height;
   const isMobile = usePortfolioStore((state) => state.isMobile);
+  const isNightMode = usePortfolioStore((state) => state.isNightMode);
 
   const cameraScrollCurve = useScrollCurve(
     initialCameraCurve,
@@ -42,8 +47,13 @@ const Scene = ({
     SHIFT_X_AMOUNT,
   );
 
+  const masterGroupRef = useRef();
   const sceneGroupRef = useRef();
   const singleSheetRef = useRef();
+  const ambientLightRef = useRef();
+  const dirLightRef = useRef();
+  const currentTintRef = useRef(new THREE.Color("#ffffff"));
+
 
   const shiftWorld = (direction = "forward") => {
     if (!sceneGroupRef.current) return;
@@ -111,7 +121,7 @@ const Scene = ({
     );
   };
 
-  useFrame(() => {
+  useFrame((state) => {
     if (camera.current) {
       const targetFov = aspect < 1 ? 52 : 35;
       if (camera.current.fov !== targetFov) {
@@ -119,6 +129,51 @@ const Scene = ({
         camera.current.updateProjectionMatrix();
       }
     }
+
+    // Animate background color
+    const targetBg = isNightMode ? new THREE.Color("#0f172a") : new THREE.Color("#fdfbf7"); // Midnight Blue vs Cream
+    if (!state.scene.background) state.scene.background = new THREE.Color("#fdfbf7");
+    state.scene.background.lerp(targetBg, 0.15);
+
+    // Animate all materials (Night Mode Tint)
+    const targetTint = isNightMode ? new THREE.Color("#1e293b") : new THREE.Color("#ffffff"); // slate-800 for true night
+    
+    // Check if we actually need to update material colors (optimization to avoid traverse overhead)
+    if (!currentTintRef.current.equals(targetTint)) {
+      currentTintRef.current.lerp(targetTint, 0.15);
+      
+      // If color is very close to target, snap it to avoid precision drift
+      const rDiff = Math.abs(currentTintRef.current.r - targetTint.r);
+      const gDiff = Math.abs(currentTintRef.current.g - targetTint.g);
+      const bDiff = Math.abs(currentTintRef.current.b - targetTint.b);
+      if (rDiff + gDiff + bDiff < 0.01) {
+        currentTintRef.current.copy(targetTint);
+      }
+
+      // Fast iteration over just the registered materials
+      globalMaterialsRegistry.forEach((material) => {
+        if (material.color) {
+          material.color.copy(currentTintRef.current);
+        }
+      });
+    }
+
+    // Animate global lights for Panda (since it's now MeshStandardMaterial)
+    if (ambientLightRef.current) {
+      ambientLightRef.current.intensity = THREE.MathUtils.lerp(
+        ambientLightRef.current.intensity,
+        isNightMode ? 0.08 : 1.5,
+        0.15
+      );
+    }
+    if (dirLightRef.current) {
+      dirLightRef.current.intensity = THREE.MathUtils.lerp(
+        dirLightRef.current.intensity,
+        isNightMode ? 0.0 : 2.5,
+        0.15
+      );
+    }
+
 
     let newProgress = THREE.MathUtils.lerp(
       scrollProgress.current,
@@ -235,16 +290,24 @@ const Scene = ({
   });
 
   return (
-    <>
+    <group ref={masterGroupRef} dispose={null}>
+      <ambientLight ref={ambientLightRef} intensity={1.5} color="#ffffff" />
+      <directionalLight ref={dirLightRef} intensity={2.5} color="#ffffff" position={[5, 10, 5]} castShadow />
+      
       <Suspense fallback={null}>
         <group position={[isMobile ? 0.8 : 0, 0, 0]}>
           <group ref={sceneGroupRef}>
             <MovingObjects scrollProgress={scrollProgress} />
             <SceneOne />
+            <Fireflies />
+            <Campfire position={[-18, 0.6, -1.5]} scale={[1.5, 1.5, 1.5]} />
+            <Campfire position={[-28, 0.6, 1]} scale={[1.2, 1.2, 1.2]} />
             <SceneTwo />
             <SceneThree scrollProgress={scrollProgress} />
+            <Campfire position={[-40, 0.6, -2]} scale={[1.8, 1.8, 1.8]} />
             <SceneFour />
           </group>
+
 
           <Panda
             scrollProgress={scrollProgress}
@@ -255,7 +318,7 @@ const Scene = ({
           </group>
         </group>
       </Suspense>
-    </>
+    </group>
   );
 };
 
