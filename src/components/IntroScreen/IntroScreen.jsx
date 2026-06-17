@@ -60,8 +60,12 @@ const IntroScreen = () => {
     <>
       <div ref={introRef} className={styles.introScreen}>
         <div className={styles.introScreenContent}>
-          <div className={styles.pandaWrapper}>
-            <span className={styles.pandaIcon}>🐼🚴‍♂️</span>
+          <div className={styles.premiumLoaderWrapper}>
+            <div className={styles.spinnerRing}></div>
+            <div className={styles.spinnerRingInner}></div>
+            <div className={styles.pandaWrapper}>
+              <span className={styles.pandaIcon}>🐼🚴‍♂️</span>
+            </div>
           </div>
 
           <h1 className={styles.title}>Rahmat's Interactive Journey</h1>

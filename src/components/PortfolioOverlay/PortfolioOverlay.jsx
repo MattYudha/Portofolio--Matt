@@ -32,6 +32,7 @@ const PortfolioOverlay = () => {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [isCardMinimized, setIsCardMinimized] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [showSwipeHint, setShowSwipeHint] = useState(false);
   const [mobileConfirmations, setMobileConfirmations] = useState({
     home: null,
     "projects-1": null,
@@ -52,8 +53,24 @@ const PortfolioOverlay = () => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
     checkMobile();
     window.addEventListener("resize", checkMobile);
+
+    const hasSeenHint = localStorage.getItem("hasSeenSwipeHint");
+    if (window.innerWidth <= 768 && !hasSeenHint) {
+      setTimeout(() => setShowSwipeHint(true), 3000);
+    }
+
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  useEffect(() => {
+    if (!showSwipeHint) return;
+    const dismissHint = () => {
+      setShowSwipeHint(false);
+      localStorage.setItem("hasSeenSwipeHint", "true");
+    };
+    window.addEventListener("touchmove", dismissHint, { once: true });
+    return () => window.removeEventListener("touchmove", dismissHint);
+  }, [showSwipeHint]);
 
   useEffect(() => {
     setIsCardMinimized(false);
@@ -394,6 +411,13 @@ const PortfolioOverlay = () => {
       )}
 
       {/* Floating Bottom Navigator / Scroll Guide */}
+      {showSwipeHint && (
+        <div className={styles.swipeHintOverlay}>
+          <span className={styles.handIcon}>👆</span>
+          <p className={styles.swipeText}>Swipe up to journey!</p>
+        </div>
+      )}
+
       <footer className={styles.footer}>
         {isMobile ? (
           <div className={styles.mobileBottomNav} data-prevent-scroll="true">

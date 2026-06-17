@@ -64,7 +64,25 @@ const Experience = () => {
     };
 
     const handleTouchMove = (e) => {
-      // In mobile slide/swipe navigation mode, we do not perform continuous vertical scroll on drag.
+      if (!isSwiping.current) return;
+      if (usePortfolioStore.getState().selectedProject || usePortfolioStore.getState().selectedExperience) return;
+      if (e.target && e.target.closest && e.target.closest("[data-prevent-scroll]")) return;
+
+      const currentY = e.touches[0].clientY;
+      const currentX = e.touches[0].clientX;
+      
+      const diffX = currentX - touchStartX.current;
+      const diffY = currentY - touchStartY.current;
+
+      // If predominantly horizontal, wait for handleTouchEnd to trigger snap
+      if (Math.abs(diffX) > Math.abs(diffY) + 10) return;
+
+      const deltaY = lastTouchY.current - currentY;
+      lastTouchY.current = currentY;
+
+      // Vertical drag -> scroll
+      const mobileScrollSensitivity = 0.003; 
+      targetScrollProgress.current += deltaY * mobileScrollSensitivity;
     };
 
     const handleTouchEnd = (e) => {
