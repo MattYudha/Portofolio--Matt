@@ -131,12 +131,12 @@ const Scene = ({
     }
 
     // Animate background color
-    const targetBg = isNightMode ? new THREE.Color("#0f172a") : new THREE.Color("#fdfbf7"); // Midnight Blue vs Cream
+    const targetBg = isNightMode ? new THREE.Color("#1e1b4b") : new THREE.Color("#fdfbf7"); // Deep Dusk Indigo vs Cream
     if (!state.scene.background) state.scene.background = new THREE.Color("#fdfbf7");
     state.scene.background.lerp(targetBg, 0.15);
 
     // Animate all materials (Night Mode Tint)
-    const targetTint = isNightMode ? new THREE.Color("#1e293b") : new THREE.Color("#ffffff"); // slate-800 for true night
+    const targetTint = isNightMode ? new THREE.Color("#475569") : new THREE.Color("#ffffff"); // slate-600 for twilight
     
     // Check if we actually need to update material colors (optimization to avoid traverse overhead)
     if (!currentTintRef.current.equals(targetTint)) {
@@ -162,14 +162,14 @@ const Scene = ({
     if (ambientLightRef.current) {
       ambientLightRef.current.intensity = THREE.MathUtils.lerp(
         ambientLightRef.current.intensity,
-        isNightMode ? 0.08 : 1.5,
+        isNightMode ? 0.35 : 1.5,
         0.15
       );
     }
     if (dirLightRef.current) {
       dirLightRef.current.intensity = THREE.MathUtils.lerp(
         dirLightRef.current.intensity,
-        isNightMode ? 0.0 : 2.5,
+        isNightMode ? 0.2 : 2.5,
         0.15
       );
     }
