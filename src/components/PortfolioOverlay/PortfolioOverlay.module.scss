@@ -923,4 +923,85 @@
       background: rgba(58, 53, 48, 0.05);
     }
   }
+
+  // Mobile Slide Navigation UI
+  .slideArrow {
+    position: fixed;
+    top: 48%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    background-color: rgba(253, 251, 247, 0.95);
+    color: #3a3530;
+    border: 1.5px solid rgba(58, 53, 48, 0.25);
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 150;
+    pointer-events: auto;
+    transition: all 0.2s ease;
+    outline: none;
+    
+    @include handShape2;
+    @include handShadow;
+    @include sketchyEdge;
+
+    &:active {
+      transform: translateY(-50%) scale(0.9);
+      background-color: rgba(253, 230, 138, 0.9);
+    }
+  }
+
+  .slideArrowLeft {
+    left: 0.5rem;
+  }
+
+  .slideArrowRight {
+    right: 0.5rem;
+  }
+
+  .mobileBottomNav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    width: 100%;
+    pointer-events: auto;
+  }
+
+  .paginationDots {
+    display: flex;
+    gap: 0.65rem;
+    justify-content: center;
+    align-items: center;
+    pointer-events: auto;
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    border: 1.5px solid #3a3530;
+    background-color: rgba(253, 251, 247, 0.6);
+    border-radius: 50%;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+
+    @include handShape3;
+
+    &:active {
+      transform: scale(1.15);
+    }
+  }
+
+  .dotActive {
+    background-color: rgba(253, 230, 138, 1);
+    border-color: #3a3530;
+    transform: scale(1.2);
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.12);
+  }
 }
+

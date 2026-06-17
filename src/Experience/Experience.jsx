@@ -18,6 +18,9 @@ const Experience = () => {
   const mousePositionOffset = useRef(new THREE.Vector3());
   const mouseRotationOffset = useRef(new THREE.Euler());
   const lastTouchY = useRef(null);
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
+  const touchStartTime = useRef(0);
 
   useEffect(() => {
     const handleWheel = (e) => {
@@ -54,28 +57,67 @@ const Experience = () => {
       if (usePortfolioStore.getState().selectedProject || usePortfolioStore.getState().selectedExperience) return;
       if (e.target && e.target.closest && e.target.closest("[data-prevent-scroll]")) return;
       isSwiping.current = true;
+      touchStartX.current = e.touches[0].clientX;
+      touchStartY.current = e.touches[0].clientY;
+      touchStartTime.current = Date.now();
       lastTouchY.current = e.touches[0].clientY;
     };
 
     const handleTouchMove = (e) => {
-      if (!isSwiping.current) return;
-      if (usePortfolioStore.getState().selectedProject || usePortfolioStore.getState().selectedExperience) return;
-
-      if (lastTouchY.current !== null) {
-        const deltaY = e.touches[0].clientY - lastTouchY.current;
-        const touchMultiplier = 0.3;
-        targetScrollProgress.current +=
-          Math.sign(deltaY) *
-          baseScrollSpeed *
-          touchMultiplier *
-          scrollSpeedMultiplier.current;
-      }
-      lastTouchY.current = e.touches[0].clientY;
+      // In mobile slide/swipe navigation mode, we do not perform continuous vertical scroll on drag.
     };
 
     const handleTouchEnd = (e) => {
+      if (!isSwiping.current) return;
       isSwiping.current = false;
       lastTouchY.current = null;
+
+      if (e.changedTouches && e.changedTouches.length > 0) {
+        const diffX = e.changedTouches[0].clientX - touchStartX.current;
+        const diffY = e.changedTouches[0].clientY - touchStartY.current;
+        const elapsedTime = Date.now() - touchStartTime.current;
+
+        // Swipe threshold: time < 350ms, horizontal delta > 40px, and horizontal delta is larger than vertical delta
+        if (elapsedTime < 350 && Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+          const targets = [0.0, 0.35, 0.60, 0.80, 0.98];
+          let currentTargetVal = targetScrollProgress.current % 1;
+          if (currentTargetVal < 0) currentTargetVal += 1;
+
+          let closestIndex = 0;
+          let minDiff = Infinity;
+          for (let i = 0; i < targets.length; i++) {
+            const diff = Math.abs(targets[i] - currentTargetVal);
+            if (diff < minDiff) {
+              minDiff = diff;
+              closestIndex = i;
+            }
+          }
+
+          if (diffX < 0) {
+            // Swipe Left -> Next Section
+            let targetVal;
+            if (closestIndex < targets.length - 1) {
+              targetVal = targets[closestIndex + 1];
+              const integerPart = Math.floor(targetScrollProgress.current);
+              targetScrollProgress.current = integerPart + targetVal;
+            } else {
+              const integerPart = Math.floor(targetScrollProgress.current);
+              targetScrollProgress.current = integerPart + 1.0;
+            }
+          } else {
+            // Swipe Right -> Previous Section
+            let targetVal;
+            if (closestIndex > 0) {
+              targetVal = targets[closestIndex - 1];
+              const integerPart = Math.floor(targetScrollProgress.current);
+              targetScrollProgress.current = integerPart + targetVal;
+            } else {
+              const integerPart = Math.floor(targetScrollProgress.current);
+              targetScrollProgress.current = integerPart - 0.02; // snaps to 0.98 of previous loop
+            }
+          }
+        }
+      }
     };
 
     const handleMouseDown = (e) => {

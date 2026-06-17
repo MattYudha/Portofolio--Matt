@@ -97,6 +97,18 @@ const PortfolioOverlay = () => {
     { label: "Contact", section: "contact", target: 0.98 },
   ];
 
+  const currentActiveIndex = navItems.findIndex(item => item.section === activeSection);
+
+  const goToNextSection = () => {
+    const nextIndex = (currentActiveIndex + 1) % navItems.length;
+    jumpToSection(navItems[nextIndex].target);
+  };
+
+  const goToPrevSection = () => {
+    const prevIndex = (currentActiveIndex - 1 + navItems.length) % navItems.length;
+    jumpToSection(navItems[prevIndex].target);
+  };
+
   return (
     <div className={styles.overlayContainer} data-prevent-scroll="true">
       {/* Floating Header */}
@@ -133,6 +145,28 @@ const PortfolioOverlay = () => {
           </a>
         </div>
       </header>
+
+      {/* Mobile Side Arrows */}
+      {isMobile && (
+        <>
+          <button 
+            className={`${styles.slideArrow} ${styles.slideArrowLeft}`}
+            onClick={goToPrevSection}
+            title="Previous Section"
+            data-prevent-scroll="true"
+          >
+            ◀
+          </button>
+          <button 
+            className={`${styles.slideArrow} ${styles.slideArrowRight}`}
+            onClick={goToNextSection}
+            title="Next Section"
+            data-prevent-scroll="true"
+          >
+            ▶
+          </button>
+        </>
+      )}
 
       {/* Main Dynamic Panel Overlays */}
       <main className={styles.mainContent}>
@@ -361,12 +395,30 @@ const PortfolioOverlay = () => {
 
       {/* Floating Bottom Navigator / Scroll Guide */}
       <footer className={styles.footer}>
-        <div className={styles.scrollIndicator}>
-          <div className={styles.mouseWheel}>
-            <div className={styles.wheelDot} />
+        {isMobile ? (
+          <div className={styles.mobileBottomNav} data-prevent-scroll="true">
+            <div className={styles.paginationDots}>
+              {navItems.map((item, index) => (
+                <button
+                  key={item.section}
+                  className={`${styles.dot} ${activeSection === item.section ? styles.dotActive : ""}`}
+                  onClick={() => jumpToSection(item.target)}
+                  title={`Go to ${item.label}`}
+                />
+              ))}
+            </div>
+            <div className={styles.scrollIndicator}>
+              <span>👈 Swipe or Tap Arrows to Slide 👉 ({currentActiveIndex + 1}/5)</span>
+            </div>
           </div>
-          <span>Scroll / Drag to Journey ({Math.round(scrollProgress * 100)}%)</span>
-        </div>
+        ) : (
+          <div className={styles.scrollIndicator}>
+            <div className={styles.mouseWheel}>
+              <div className={styles.wheelDot} />
+            </div>
+            <span>Scroll / Drag to Journey ({Math.round(scrollProgress * 100)}%)</span>
+          </div>
+        )}
       </footer>
     </div>
   );
