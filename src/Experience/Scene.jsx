@@ -1,6 +1,6 @@
 import { React, Suspense, useState, useRef } from "react";
 import * as THREE from "three";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import MovingObjects from "./models/Moving_Objects";
 import SceneOne from "./models/SceneOne";
 import SceneTwo from "./models/SceneTwo";
@@ -15,6 +15,7 @@ import {
   rotationTargets,
 } from "./components/curve";
 import { useScrollCurve } from "./hooks/useScrollCurve";
+import { usePortfolioStore } from "../store/usePortfolioStore";
 
 const WORLD_FORWARD_TRIGGER = 0.92;
 const WORLD_BACK_TRIGGER = 0.91;
@@ -31,6 +32,9 @@ const Scene = ({
   mouseRotationOffset,
   scrollSpeedMultiplier,
 }) => {
+  const { size } = useThree();
+  const aspect = size.width / size.height;
+
   const cameraScrollCurve = useScrollCurve(
     initialCameraCurve,
     initialCameraPoints,
@@ -107,6 +111,14 @@ const Scene = ({
   };
 
   useFrame(() => {
+    if (camera.current) {
+      const targetFov = aspect < 1 ? 52 : 35;
+      if (camera.current.fov !== targetFov) {
+        camera.current.fov = targetFov;
+        camera.current.updateProjectionMatrix();
+      }
+    }
+
     let newProgress = THREE.MathUtils.lerp(
       scrollProgress.current,
       targetScrollProgress.current,
@@ -140,6 +152,7 @@ const Scene = ({
     }
 
     scrollProgress.current = newProgress;
+    usePortfolioStore.getState().setScrollProgress(newProgress);
 
     if (cameraScrollCurve.transitionCurveActive.current) {
       scrollSpeedMultiplier.current = newProgress <= 0.95 ? 6 : 1;

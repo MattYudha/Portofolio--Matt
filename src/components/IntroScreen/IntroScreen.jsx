@@ -3,6 +3,7 @@ import { useProgress } from "@react-three/drei";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import styles from "./IntroScreen.module.scss";
+import { usePortfolioStore } from "../../store/usePortfolioStore";
 
 const IntroScreen = () => {
   const { progress } = useProgress();
@@ -14,6 +15,7 @@ const IntroScreen = () => {
       const tl = gsap.timeline({
         onComplete: () => {
           setShouldRender(false);
+          usePortfolioStore.getState().setIsLoaded(true);
         },
       });
 

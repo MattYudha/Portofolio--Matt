@@ -1,9 +1,10 @@
-import React, { useRef, useState, useMemo } from "react";
+import React, { useRef, useState, useMemo, useEffect } from "react";
 import { useGLTF } from "@react-three/drei";
 import { useKTX2Texture } from "../utils/ktxLoader";
 import { useScrollCurve } from "../hooks/useScrollCurve";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
+import { usePortfolioStore } from "../../store/usePortfolioStore";
 import {
   initialPandaPoints,
   PANDA_SHIFT_X_AMOUNT,
@@ -18,6 +19,14 @@ export default function Model({ scrollProgress, cameraScrollCurve, ...props }) {
   const desert = useKTX2Texture("/textures/desert.ktx2");
   const zombie = useKTX2Texture("/textures/zombie.ktx2");
   const pandaRef = useRef();
+
+  const setPandaRef = usePortfolioStore((state) => state.setPandaRef);
+
+  useEffect(() => {
+    if (pandaRef.current) {
+      setPandaRef(pandaRef);
+    }
+  }, [setPandaRef]);
 
   const textureMap = useMemo(
     () => [

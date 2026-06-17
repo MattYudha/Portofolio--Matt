@@ -21,19 +21,34 @@
     />
     <link rel="manifest" href="/media/site.webmanifest" />
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Indie+Flower&family=Shadows+Into+Light&family=Kalam:wght@300;400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+
     <meta name="language" content="English" />
+    <meta name="keywords" content="Rahmat Yudi Burhanudin, Full-Stack Developer, Systems Architect, Next.js, Go, React, Python, Rust, Solidity, Supabase, Indonesia, Web Developer" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="/media/og-image.webp" />
 
     <meta
       name="description"
-      content="Mr. Panda's Portfolio fighting back against toxicity in the creative industry. "
+      content="Professional portfolio of Rahmat Yudi Burhanudin, a Full-Stack Developer & Systems Architect specializing in Next.js, Go, Python, Supabase, and Swarm AI systems."
     />
 
-    <title>Mr. Panda's Psychologically Safe Portfolio</title>
+    <title>Rahmat Yudi Burhanudin - Full-Stack Developer & Systems Architect</title>
   </head>
   <body>
+    <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden">
+      <filter id="sketchy">
+        <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="2"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+      <filter id="sketchy-subtle">
+        <feTurbulence type="turbulence" baseFrequency="0.025" numOctaves="2" result="noise" seed="5"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </svg>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

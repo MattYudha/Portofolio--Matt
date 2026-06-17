@@ -1,0 +1,84 @@
+// ============================================
+// 3D PAPER OVERLAYS — Hand-drawn Rectangle Style  
+// Slightly wobbly edges, content stays inside
+// ============================================
+
+.paperNote {
+  background-color: rgba(253, 251, 247, 0.92);
+  padding: 18px 22px;
+  font-family: "Caveat", "Shadows Into Light", cursive;
+  color: #3a3530;
+  
+  // Subtle hand-drawn rectangle, NOT an oval
+  border-radius: 14px 22px 12px 20px / 18px 14px 20px 16px;
+  border: 1.5px solid rgba(58, 53, 48, 0.2);
+  box-shadow: 3px 5px 12px rgba(0,0,0,0.12), 1px 2px 4px rgba(0,0,0,0.06);
+  filter: url(#sketchy-subtle);
+
+  font-size: 26px;
+  line-height: 1.4;
+  pointer-events: none;
+  position: relative;
+  overflow: hidden;
+
+  h3 {
+    font-family: "Caveat", cursive;
+    font-weight: 700;
+    font-size: 36px;
+    color: #3a3530;
+    margin-bottom: 6px;
+  }
+
+  p {
+    font-family: "Shadows Into Light", cursive;
+    font-size: 22px;
+    color: #4a4540;
+    line-height: 1.45;
+  }
+}
+
+.introNote {
+  width: 340px;
+  transform: rotate(-0.8deg);
+  border-radius: 16px 24px 14px 20px / 20px 16px 22px 14px;
+}
+
+.aboutNote {
+  background-color: rgba(254, 243, 199, 0.85);
+  width: 380px;
+  transform: rotate(0.8deg);
+  border-radius: 20px 14px 22px 16px / 14px 20px 16px 24px;
+}
+
+.jobNote {
+  padding: 16px 20px;
+  
+  h3 {
+    font-size: 28px;
+    margin-bottom: 3px;
+  }
+  h4 {
+    font-family: "Shadows Into Light", cursive;
+    color: #5a4a3a;
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+  p {
+    font-size: 19px;
+    color: #5a5550;
+  }
+}
+
+.telkomNote {
+  background-color: rgba(224, 242, 254, 0.8);
+  width: 340px;
+  transform: rotate(-0.5deg);
+  border-radius: 22px 16px 18px 14px / 16px 22px 14px 20px;
+}
+
+.aratechNote {
+  background-color: rgba(220, 252, 231, 0.8);
+  width: 320px;
+  transform: rotate(1.2deg);
+  border-radius: 14px 20px 24px 16px / 18px 14px 22px 16px;
+}

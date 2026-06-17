@@ -2,6 +2,8 @@ import React, { useRef } from "react";
 import { useGLTF } from "@react-three/drei";
 import { useKTX2Texture } from "../utils/ktxLoader";
 import { useFrame } from "@react-three/fiber";
+import { usePortfolioStore } from "../../store/usePortfolioStore";
+import { projectsData } from "../../data/portfolioData";
 
 export default function Model(props) {
   const { nodes, materials } = useGLTF("/models/scene_4.glb");
@@ -88,8 +90,18 @@ export default function Model(props) {
         material={scene_4}
         position={[16.29, 3.282, firstPaperOriginalZ]}
         rotation={[Math.PI / 2, -0.007, 0]}
-        onPointerEnter={() => (firstPaperHovered.current = true)}
-        onPointerLeave={() => (firstPaperHovered.current = false)}
+        onPointerEnter={() => {
+          firstPaperHovered.current = true;
+          usePortfolioStore.getState().setHoveredItem("elysian_project");
+        }}
+        onPointerLeave={() => {
+          firstPaperHovered.current = false;
+          usePortfolioStore.getState().setHoveredItem(null);
+        }}
+        onClick={() => {
+          const proj = projectsData.find((p) => p.id === "elysian");
+          if (proj) usePortfolioStore.getState().setSelectedProject(proj);
+        }}
       />
       <mesh
         ref={secondPaperRef}
@@ -97,8 +109,18 @@ export default function Model(props) {
         material={scene_4}
         position={[17.918, 4.052, secondPaperOriginalZ]}
         rotation={[Math.PI / 2, -0.114, 0]}
-        onPointerEnter={() => (secondPaperHovered.current = true)}
-        onPointerLeave={() => (secondPaperHovered.current = false)}
+        onPointerEnter={() => {
+          secondPaperHovered.current = true;
+          usePortfolioStore.getState().setHoveredItem("floodzy_project");
+        }}
+        onPointerLeave={() => {
+          secondPaperHovered.current = false;
+          usePortfolioStore.getState().setHoveredItem(null);
+        }}
+        onClick={() => {
+          const proj = projectsData.find((p) => p.id === "floodzy");
+          if (proj) usePortfolioStore.getState().setSelectedProject(proj);
+        }}
       />
       <mesh
         geometry={nodes.Plane127.geometry}

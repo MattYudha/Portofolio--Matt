@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host",
-    "build": "vite build",
+    "dev": "npx vite --host",
+    "build": "npx vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "npx vite preview"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -25,7 +25,7 @@
     "sass": "^1.85.1",
     "three": "^0.182.0",
     "troika-three-text": "^0.52.4",
-    "zustand": "^5.0.3"
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

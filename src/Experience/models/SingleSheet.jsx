@@ -9,6 +9,8 @@ import { SHIFT_X_AMOUNT } from "../components/curve";
 import { useFrame } from "@react-three/fiber";
 import { gsap } from "gsap";
 import * as THREE from "three";
+import { usePortfolioStore } from "../../store/usePortfolioStore";
+import { projectsData } from "../../data/portfolioData";
 
 export default function Model({ scrollProgress, ...props }) {
   const { nodes, materials } = useGLTF("/models/single_sheet.glb");
@@ -218,6 +220,16 @@ export default function Model({ scrollProgress, ...props }) {
           material={kpop}
           scale={[-0.999, -1, -0.447]}
           rotation={[0, Math.PI, 0]}
+          onPointerEnter={() => {
+            usePortfolioStore.getState().setHoveredItem("kicau_finder");
+          }}
+          onPointerLeave={() => {
+            usePortfolioStore.getState().setHoveredItem(null);
+          }}
+          onClick={() => {
+            const proj = projectsData.find((p) => p.id === "kicau_finder");
+            if (proj) usePortfolioStore.getState().setSelectedProject(proj);
+          }}
         />
       </group>
 
@@ -228,6 +240,16 @@ export default function Model({ scrollProgress, ...props }) {
           material={kpop}
           scale={[0.999, 1, 0.574]}
           rotation={[0, Math.PI, 0]}
+          onPointerEnter={() => {
+            usePortfolioStore.getState().setHoveredItem("emran_profile");
+          }}
+          onPointerLeave={() => {
+            usePortfolioStore.getState().setHoveredItem(null);
+          }}
+          onClick={() => {
+            const proj = projectsData.find((p) => p.id === "emran_profile");
+            if (proj) usePortfolioStore.getState().setSelectedProject(proj);
+          }}
         />
       </group>
     </group>

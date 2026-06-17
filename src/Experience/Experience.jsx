@@ -2,8 +2,9 @@ import React, { useRef, useEffect, useMemo } from "react";
 import { Canvas, extend, useThree } from "@react-three/fiber";
 import { PerspectiveCamera, OrbitControls } from "@react-three/drei";
 import Scene from "./Scene";
-import * as THREE from "three/webgpu";
+import * as THREE from "three";
 import normalizeWheel from "normalize-wheel";
+import { usePortfolioStore } from "../store/usePortfolioStore";
 
 const Experience = () => {
   const camera = useRef();
@@ -20,6 +21,9 @@ const Experience = () => {
 
   useEffect(() => {
     const handleWheel = (e) => {
+      if (usePortfolioStore.getState().selectedProject || usePortfolioStore.getState().selectedExperience) return;
+      if (e.target && e.target.closest && e.target.closest("[data-prevent-scroll]")) return;
+      
       const normalized = normalizeWheel(e);
 
       targetScrollProgress.current +=
@@ -47,12 +51,15 @@ const Experience = () => {
     };
 
     const handleTouchStart = (e) => {
+      if (usePortfolioStore.getState().selectedProject || usePortfolioStore.getState().selectedExperience) return;
+      if (e.target && e.target.closest && e.target.closest("[data-prevent-scroll]")) return;
       isSwiping.current = true;
       lastTouchY.current = e.touches[0].clientY;
     };
 
     const handleTouchMove = (e) => {
       if (!isSwiping.current) return;
+      if (usePortfolioStore.getState().selectedProject || usePortfolioStore.getState().selectedExperience) return;
 
       if (lastTouchY.current !== null) {
         const deltaY = e.touches[0].clientY - lastTouchY.current;
@@ -72,28 +79,40 @@ const Experience = () => {
     };
 
     const handleMouseDown = (e) => {
+      if (usePortfolioStore.getState().selectedProject || usePortfolioStore.getState().selectedExperience) return;
       if (e.pointerType === "touch") return;
+      if (e.target && e.target.closest && e.target.closest("[data-prevent-scroll]")) return;
       isSwiping.current = true;
     };
 
     const handleMouseDrag = (e) => {
       if (!isSwiping.current || e.pointerType === "touch") return;
+      if (usePortfolioStore.getState().selectedProject || usePortfolioStore.getState().selectedExperience) return;
+      
       const mouseMultiplier = 0.2;
       targetScrollProgress.current +=
-        Math.sign(e.movementY) * scrollSpeed * mouseMultiplier;
+        Math.sign(e.movementY) * baseScrollSpeed * mouseMultiplier;
     };
 
     const handleMouseUp = () => {
       isSwiping.current = false;
     };
 
+    const handleJump = (e) => {
+      if (typeof e.detail === "number") {
+        targetScrollProgress.current = e.detail;
+      }
+    };
+
     window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("mousedown", handleMouseDown);
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mousemove", handleMouseDrag);
     window.addEventListener("mouseup", handleMouseUp);
     window.addEventListener("touchstart", handleTouchStart, { passive: false });
     window.addEventListener("touchmove", handleTouchMove, { passive: false });
     window.addEventListener("touchend", handleTouchEnd);
+    window.addEventListener("portfolio-jump", handleJump);
 
     return () => {
       window.removeEventListener("wheel", handleWheel);
@@ -104,6 +123,7 @@ const Experience = () => {
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchmove", handleTouchMove);
       window.removeEventListener("touchend", handleTouchEnd);
+      window.removeEventListener("portfolio-jump", handleJump);
     };
   }, []);
 
@@ -111,12 +131,7 @@ const Experience = () => {
     <Canvas
       shadows
       flat={true}
-      gl={(props) => {
-        extend(THREE);
-        const renderer = new THREE.WebGPURenderer(props);
-        return renderer.init().then(() => renderer);
-      }}
-      style={{ width: "100vw", height: "100vh" }}
+      style={{ width: "100vw", height: "100vh", position: "fixed", top: 0, left: 0, zIndex: 1 }}
     >
       <Scene
         cameraGroup={cameraGroup}

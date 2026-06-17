@@ -1,11 +1,15 @@
 import React, { useRef, useMemo } from "react";
-import { useGLTF, useKTX2 } from "@react-three/drei";
+import { useGLTF, useKTX2, Html } from "@react-three/drei";
 import { useKTX2Texture } from "../utils/ktxLoader";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { usePortfolioStore } from "../../store/usePortfolioStore";
+import { profileData } from "../../data/portfolioData";
+import styles from "../PaperOverlays.module.scss";
 
 export default function Model(props) {
   const { nodes, materials } = useGLTF("/models/scene_1.glb");
+  const pandaRef = usePortfolioStore((state) => state.pandaRef);
 
   const mrsPandaRef = useRef();
 
@@ -271,21 +275,91 @@ export default function Model(props) {
       <mesh
         ref={introRef}
         geometry={nodes.intro.geometry}
-        material={not_waterfall}
+        material={new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })}
         position={[-17.941, 2.096, introOriginalZ]}
         rotation={[Math.PI / 2, 0.025, 0]}
-        onPointerEnter={() => (introHovered.current = true)}
-        onPointerLeave={() => (introHovered.current = false)}
-      />
+        onPointerEnter={() => {
+          introHovered.current = true;
+          usePortfolioStore.getState().setHoveredItem("intro");
+        }}
+        onPointerLeave={() => {
+          introHovered.current = false;
+          usePortfolioStore.getState().setHoveredItem(null);
+        }}
+        onClick={() => {
+          usePortfolioStore.getState().setSelectedExperience({
+            id: "about_rahmat",
+            role: "Profile & Bio",
+            company: profileData.name,
+            period: "Full-Stack Mobile Developer Swift / Flutter",
+            location: profileData.location,
+            description: profileData.about,
+            bullets: [
+              `GPA: ${profileData.education.gpa}, Informatics Engineering.`,
+              `Bootcamps: ${profileData.education.details}`,
+              "Specialties: React.js, Next.js, Go (Golang), Python, Rust, Solidity, Supabase, Leaflet, Three.js, Docker."
+            ]
+          });
+        }}
+      >
+        <Html
+          transform
+          position={[0, 0, 0.1]}
+          rotation={[-Math.PI / 2, 0, 0]}
+          scale={0.15}
+          pointerEvents="none"
+          occlude="blending"
+        >
+          <div className={`${styles.paperNote} ${styles.introNote}`} data-prevent-scroll="true">
+            <h3>Welcome to my portfolio!!</h3>
+            <p>~ {profileData.name}<br/>p.s. I ❤ building things!!</p>
+          </div>
+        </Html>
+      </mesh>
       <mesh
         ref={aboutRef}
         geometry={nodes.about.geometry}
-        material={not_waterfall}
+        material={new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })}
         position={[-15.7, 1.987, aboutOriginalZ]}
         rotation={[Math.PI / 2, 0.025, 0]}
-        onPointerEnter={() => (aboutHovered.current = true)}
-        onPointerLeave={() => (aboutHovered.current = false)}
-      />
+        onPointerEnter={() => {
+          aboutHovered.current = true;
+          usePortfolioStore.getState().setHoveredItem("about");
+        }}
+        onPointerLeave={() => {
+          aboutHovered.current = false;
+          usePortfolioStore.getState().setHoveredItem(null);
+        }}
+        onClick={() => {
+          usePortfolioStore.getState().setSelectedExperience({
+            id: "about_rahmat",
+            role: "Profile & Bio",
+            company: profileData.name,
+            period: "Full-Stack Mobile Developer Swift / Flutter",
+            location: profileData.location,
+            description: profileData.about,
+            bullets: [
+              `GPA: ${profileData.education.gpa}, Informatics Engineering.`,
+              `Bootcamps: ${profileData.education.details}`,
+              "Specialties: React.js, Next.js, Go (Golang), Python, Rust, Solidity, Supabase, Leaflet, Three.js, Docker."
+            ]
+          });
+        }}
+      >
+        <Html
+          transform
+          position={[0, 0, 0.1]}
+          rotation={[-Math.PI / 2, 0, 0]}
+          scale={0.15}
+          pointerEvents="none"
+          occlude="blending"
+        >
+          <div className={`${styles.paperNote} ${styles.aboutNote}`} data-prevent-scroll="true">
+            <h3>I am a mobile developer</h3>
+            <p>trying to build cool stuff &amp; solve real problems. They are very challenging; not simple and easy like tutorials. Future projects are needed.</p>
+          </div>
+        </Html>
+      </mesh>
       <mesh
         ref={waterfall}
         geometry={nodes.Waterfall001.geometry}
