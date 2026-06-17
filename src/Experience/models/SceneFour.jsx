@@ -20,8 +20,8 @@ export default function Model(props) {
   const firstPaperOriginalZ = -2.754;
   const secondPaperOriginalZ = -2.754;
 
-  const firstPaperHoverZ = firstPaperOriginalZ + 5;
-  const secondPaperHoverZ = secondPaperOriginalZ + 5;
+  const firstPaperHoverZ = firstPaperOriginalZ + 1.5;
+  const secondPaperHoverZ = secondPaperOriginalZ + 1.5;
 
   const lerpFactor = 0.1;
 

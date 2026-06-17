@@ -76,6 +76,11 @@ const PortfolioOverlay = () => {
 
   const isPromptReady = activeSection !== "home" || scrollProgress >= 0.04;
   const shouldShowCard = !isMobile || mobileConfirmations[activeSection] === true;
+  const showPrompt = isMobile && mobileConfirmations[activeSection] === null && isPromptReady && sectionPrompts[activeSection];
+
+  useEffect(() => {
+    usePortfolioStore.getState().setIsPromptOpen(!!showPrompt);
+  }, [showPrompt]);
 
   if (!isLoaded) return null;
 
@@ -383,7 +388,7 @@ const PortfolioOverlay = () => {
       </main>
 
       {/* Mobile Scroll Confirmation Prompt */}
-      {isMobile && mobileConfirmations[activeSection] === null && isPromptReady && sectionPrompts[activeSection] && (
+      {showPrompt && (
         <div className={`${styles.mobilePromptContainer} ${styles.fadeIn}`}>
           <p className={styles.mobilePromptText}>{sectionPrompts[activeSection]}</p>
           <div className={styles.mobilePromptActions}>

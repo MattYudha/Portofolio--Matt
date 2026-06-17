@@ -162,6 +162,7 @@ export default function Model({ scrollProgress, cameraScrollCurve, ...props }) {
   });
 
   const [currentDialogue, setCurrentDialogue] = useState(pandaDialogue[0].text);
+  const isPromptOpen = usePortfolioStore((state) => state.isPromptOpen);
 
   return (
     <group {...props} dispose={null}>
@@ -179,7 +180,7 @@ export default function Model({ scrollProgress, cameraScrollCurve, ...props }) {
           style={{
             pointerEvents: "none",
             transition: "opacity 0.3s ease",
-            opacity: scrollProgress.current > 0.98 ? 0 : 1
+            opacity: (scrollProgress.current > 0.98 || isPromptOpen) ? 0 : 1
           }}
           zIndexRange={[100, 0]}
         >

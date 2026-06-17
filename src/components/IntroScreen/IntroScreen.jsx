@@ -12,16 +12,18 @@ const IntroScreen = () => {
   const progressRef = useRef({ val: 0 });
   const introRef = useRef(null);
 
-  // Smooth out the progress value
+  // Smooth out the progress value, ensuring it never goes backwards
   useEffect(() => {
-    gsap.to(progressRef.current, {
-      val: progress,
-      duration: 1.2, // Smooth duration
-      ease: "power2.out",
-      onUpdate: () => {
-        setSmoothProgress(progressRef.current.val);
-      }
-    });
+    if (progress > progressRef.current.val) {
+      gsap.to(progressRef.current, {
+        val: progress,
+        duration: 1.2, // Smooth duration
+        ease: "power2.out",
+        onUpdate: () => {
+          setSmoothProgress(progressRef.current.val);
+        }
+      });
+    }
   }, [progress]);
 
   useGSAP(() => {

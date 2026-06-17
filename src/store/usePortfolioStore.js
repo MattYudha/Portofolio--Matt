@@ -51,4 +51,7 @@ export const usePortfolioStore = create((set) => ({
 
   isMobile: false,
   setIsMobile: (status) => set({ isMobile: status }),
+
+  isPromptOpen: false,
+  setIsPromptOpen: (status) => set({ isPromptOpen: status }),
 }));
