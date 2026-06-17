@@ -95,44 +95,51 @@ const Experience = () => {
         const diffY = e.changedTouches[0].clientY - touchStartY.current;
         const elapsedTime = Date.now() - touchStartTime.current;
 
-        // Swipe threshold: time < 350ms, horizontal delta > 40px, and horizontal delta is larger than vertical delta
-        if (elapsedTime < 350 && Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
-          const targets = [0.0, 0.35, 0.60, 0.80, 0.98];
-          let currentTargetVal = targetScrollProgress.current % 1;
-          if (currentTargetVal < 0) currentTargetVal += 1;
+        // Swipe threshold
+        if (elapsedTime < 350) {
+          if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+            const targets = [0.0, 0.35, 0.60, 0.80, 0.98];
+            let currentTargetVal = targetScrollProgress.current % 1;
+            if (currentTargetVal < 0) currentTargetVal += 1;
 
-          let closestIndex = 0;
-          let minDiff = Infinity;
-          for (let i = 0; i < targets.length; i++) {
-            const diff = Math.abs(targets[i] - currentTargetVal);
-            if (diff < minDiff) {
-              minDiff = diff;
-              closestIndex = i;
+            let closestIndex = 0;
+            let minDiff = Infinity;
+            for (let i = 0; i < targets.length; i++) {
+              const diff = Math.abs(targets[i] - currentTargetVal);
+              if (diff < minDiff) {
+                minDiff = diff;
+                closestIndex = i;
+              }
             }
-          }
 
-          if (diffX < 0) {
-            // Swipe Left -> Next Section
-            let targetVal;
-            if (closestIndex < targets.length - 1) {
-              targetVal = targets[closestIndex + 1];
-              const integerPart = Math.floor(targetScrollProgress.current);
-              targetScrollProgress.current = integerPart + targetVal;
+            if (diffX < 0) {
+              // Swipe Left -> Next Section
+              let targetVal;
+              if (closestIndex < targets.length - 1) {
+                targetVal = targets[closestIndex + 1];
+                const integerPart = Math.floor(targetScrollProgress.current);
+                targetScrollProgress.current = integerPart + targetVal;
+              } else {
+                const integerPart = Math.floor(targetScrollProgress.current);
+                targetScrollProgress.current = integerPart + 1.0;
+              }
             } else {
-              const integerPart = Math.floor(targetScrollProgress.current);
-              targetScrollProgress.current = integerPart + 1.0;
+              // Swipe Right -> Previous Section
+              let targetVal;
+              if (closestIndex > 0) {
+                targetVal = targets[closestIndex - 1];
+                const integerPart = Math.floor(targetScrollProgress.current);
+                targetScrollProgress.current = integerPart + targetVal;
+              } else {
+                const integerPart = Math.floor(targetScrollProgress.current);
+                targetScrollProgress.current = integerPart - 0.02; // snaps to 0.98 of previous loop
+              }
             }
-          } else {
-            // Swipe Right -> Previous Section
-            let targetVal;
-            if (closestIndex > 0) {
-              targetVal = targets[closestIndex - 1];
-              const integerPart = Math.floor(targetScrollProgress.current);
-              targetScrollProgress.current = integerPart + targetVal;
-            } else {
-              const integerPart = Math.floor(targetScrollProgress.current);
-              targetScrollProgress.current = integerPart - 0.02; // snaps to 0.98 of previous loop
-            }
+          } else if (Math.abs(diffY) > 20) {
+            // Vertical Flick -> Add Momentum
+            // diffY < 0 means swiped UP -> move forward -> increase progress
+            const mobileMomentumMultiplier = 0.004; 
+            targetScrollProgress.current -= diffY * mobileMomentumMultiplier;
           }
         }
       }
