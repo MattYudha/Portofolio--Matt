@@ -136,27 +136,6 @@ const PortfolioOverlay = () => {
 
       {/* Main Dynamic Panel Overlays */}
       <main className={styles.mainContent}>
-        {/* Mobile Scroll Confirmation Prompt */}
-        {isMobile && mobileConfirmations[activeSection] === null && isPromptReady && sectionPrompts[activeSection] && (
-          <div className={`${styles.mobilePromptContainer} ${styles.fadeIn}`}>
-            <p className={styles.mobilePromptText}>{sectionPrompts[activeSection]}</p>
-            <div className={styles.mobilePromptActions}>
-              <button 
-                className={styles.promptBtnYes} 
-                onClick={() => setMobileConfirmations(prev => ({ ...prev, [activeSection]: true }))}
-              >
-                Ya
-              </button>
-              <button 
-                className={styles.promptBtnNo} 
-                onClick={() => setMobileConfirmations(prev => ({ ...prev, [activeSection]: false }))}
-              >
-                Tidak
-              </button>
-            </div>
-          </div>
-        )}
-
         {/* PROFILE SECTION (LEFT PANEL) */}
         {activeSection === "home" && shouldShowCard && (
           <section className={`${styles.panel} ${styles.panelLeft} ${styles.fadeIn} ${scrollProgress >= 0.10 ? styles.cardHidden : ""} ${scrollProgress < 0.04 ? styles.mobileStartHidden : ""}`}>
@@ -358,6 +337,27 @@ const PortfolioOverlay = () => {
           </section>
         )}
       </main>
+
+      {/* Mobile Scroll Confirmation Prompt */}
+      {isMobile && mobileConfirmations[activeSection] === null && isPromptReady && sectionPrompts[activeSection] && (
+        <div className={`${styles.mobilePromptContainer} ${styles.fadeIn}`}>
+          <p className={styles.mobilePromptText}>{sectionPrompts[activeSection]}</p>
+          <div className={styles.mobilePromptActions}>
+            <button 
+              className={styles.promptBtnYes} 
+              onClick={() => setMobileConfirmations(prev => ({ ...prev, [activeSection]: true }))}
+            >
+              Ya
+            </button>
+            <button 
+              className={styles.promptBtnNo} 
+              onClick={() => setMobileConfirmations(prev => ({ ...prev, [activeSection]: false }))}
+            >
+              Tidak
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Floating Bottom Navigator / Scroll Guide */}
       <footer className={styles.footer}>

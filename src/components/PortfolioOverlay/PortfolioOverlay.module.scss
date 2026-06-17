@@ -853,11 +853,11 @@
   }
 
   .mobilePromptContainer {
-    position: fixed;
+    position: absolute;
     bottom: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
+    left: 1rem;
+    right: 1rem;
+    width: auto;
     max-width: 380px;
     background-color: rgba(253, 251, 247, 0.95);
     @include handShape1;
@@ -871,6 +871,7 @@
     gap: 0.75rem;
     z-index: 200;
     pointer-events: auto;
+    margin: 0 auto;
   }
 
   .mobilePromptText {
