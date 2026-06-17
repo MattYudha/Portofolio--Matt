@@ -73,7 +73,8 @@ const Experience = () => {
       lastTouchY.current = currentY;
 
       // Vertical drag -> scroll
-      const mobileScrollSensitivity = 0.003; 
+      // Reduced sensitivity by 12x to make 1 screen of drag move ~0.2 progress (natural browser feel)
+      const mobileScrollSensitivity = 0.00025; 
       targetScrollProgress.current += deltaY * mobileScrollSensitivity;
     };
 
@@ -89,8 +90,8 @@ const Experience = () => {
         // Swipe threshold for momentum
         if (elapsedTime < 350 && Math.abs(diffY) > 20) {
           // Vertical Flick -> Add Momentum
-          // diffY < 0 means swiped UP -> move forward -> increase progress
-          const mobileMomentumMultiplier = 0.004; 
+          // Reduced momentum multiplier by 10x to prevent skipping sections
+          const mobileMomentumMultiplier = 0.0004; 
           targetScrollProgress.current -= diffY * mobileMomentumMultiplier;
         }
       }
