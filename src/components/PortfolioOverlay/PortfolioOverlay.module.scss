@@ -1081,7 +1081,7 @@
 :global(.night-mode) .overlayContainer {
   color: #e2e8f0; // slate-200
 
-  .glassCard, .logoContainer, .nav, .timelineContent, .mobilePromptContainer, input, textarea, .scrollIndicator, .slideArrow {
+  .glassCard, .logoContainer, .nav, .timelineContent, .mobilePromptContainer, input, textarea, .scrollIndicator, .slideArrow, .themeToggleBtn {
     background-color: rgba(15, 23, 42, 0.85) !important; // Dark Blue / Midnight Blue
     border-color: rgba(148, 163, 184, 0.25) !important;
     color: #e2e8f0 !important;
