@@ -231,12 +231,25 @@ const PortfolioOverlay = () => {
     <div className={styles.overlayContainer} data-prevent-scroll="true">
       {/* Floating Header */}
       <header className={styles.header}>
-        <div className={styles.logoContainer} onClick={() => jumpToSection(0)}>
-          <span className={styles.logoPanda}>🐼</span>
-          <div>
-            <h1 className={styles.logoName}>{profileData.name}</h1>
-            <p className={styles.logoTitle}>{profileData.title}</p>
+        <div className={styles.headerTop}>
+          <div className={styles.logoContainer} onClick={() => jumpToSection(0)}>
+            <span className={styles.logoPanda}>🐼</span>
+            <div>
+              <h1 className={styles.logoName}>{profileData.name}</h1>
+              <p className={styles.logoTitle}>{profileData.title}</p>
+            </div>
           </div>
+          
+          {/* Mobile Dark Mode Toggle (Always visible) */}
+          {isMobile && (
+            <button
+              className={styles.themeToggleBtn}
+              onClick={toggleNightMode}
+              title="Toggle Night Mode"
+            >
+              {isNightMode ? "☀️" : "🌙"}
+            </button>
+          )}
         </div>
 
         <nav className={styles.nav}>
@@ -249,14 +262,17 @@ const PortfolioOverlay = () => {
               {item.label}
             </button>
           ))}
-          <button
-            className={styles.navItem}
-            onClick={toggleNightMode}
-            title="Toggle Night Mode"
-            style={{ fontSize: "1.2rem", padding: "0.4rem 0.6rem" }}
-          >
-            {isNightMode ? "☀️" : "🌙"}
-          </button>
+          {/* Desktop Dark Mode Toggle (Inside Nav) */}
+          {!isMobile && (
+            <button
+              className={styles.navItem}
+              onClick={toggleNightMode}
+              title="Toggle Night Mode"
+              style={{ fontSize: "1.2rem", padding: "0.4rem 0.6rem" }}
+            >
+              {isNightMode ? "☀️" : "🌙"}
+            </button>
+          )}
         </nav>
 
         <div className={styles.socials}>
